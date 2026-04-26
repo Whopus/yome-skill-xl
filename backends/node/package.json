@@ -1,0 +1,14 @@
+{
+  "name": "@yome/skill-xl-node",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node backend for @yome/xl — used by Yome Agent and Server agent runtime.",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "yome": {
+    "implements_signature": ">=1.0.0 <2.0.0"
+  }
+}

@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>@yome/xl viewer</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #6b6b6b;
+    --border: #d8d8d8;
+    --accent: #E87B35;
+    --grid: #ececec;
+    --header: #f5f5f5;
+    --active-tab: #fff;
+    --inactive-tab: #efefef;
+    --dirty: #c66;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161616;
+      --fg: #eaeaea;
+      --muted: #9a9a9a;
+      --border: #3a3a3a;
+      --grid: #2a2a2a;
+      --header: #222;
+      --active-tab: #2a2a2a;
+      --inactive-tab: #1d1d1d;
+    }
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 13px -apple-system, BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;
+    height: 100%;
+  }
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  header {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  header .file {
+    font-weight: 600;
+    color: var(--fg);
+  }
+  header .dirty {
+    color: var(--dirty);
+    font-weight: 700;
+    margin-left: 4px;
+  }
+  header .empty {
+    color: var(--muted);
+    font-style: italic;
+  }
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--header);
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 6px 14px;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    background: var(--inactive-tab);
+    white-space: nowrap;
+    user-select: none;
+  }
+  .tab.active {
+    background: var(--active-tab);
+    border-bottom: 2px solid var(--accent);
+  }
+  .grid-wrap {
+    flex: 1;
+    overflow: auto;
+    background: var(--bg);
+  }
+  table.grid {
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  table.grid th, table.grid td {
+    border: 1px solid var(--grid);
+    padding: 3px 6px;
+    min-width: 60px;
+    vertical-align: top;
+    background: var(--bg);
+  }
+  table.grid th {
+    background: var(--header);
+    font-weight: 600;
+    text-align: center;
+    color: var(--muted);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  table.grid th.row-head {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+  }
+  table.grid td.merged-into {
+    background: transparent;
+    color: transparent;
+    border-color: transparent;
+  }
+  .empty-state {
+    padding: 40px;
+    text-align: center;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="header"><span class="empty">no workbook open</span></header>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid-wrap" id="grid-wrap"></div>
+</div>
+<script>
+'use strict';
+
+let currentProps = { files: [] };
+let activeSheetName = null;
+
+function colLetter(idx) {
+  // 0-based
+  let n = idx, out = '';
+  while (n >= 0) {
+    out = String.fromCharCode(65 + (n % 26)) + out;
+    n = Math.floor(n / 26) - 1;
+  }
+  return out;
+}
+
+function cellStyle(c) {
+  const s = [];
+  if (c.bold) s.push('font-weight:700');
+  if (c.italic) s.push('font-style:italic');
+  if (c.fontSize) s.push(`font-size:${c.fontSize}px`);
+  if (c.color) s.push(`color:${cssColor(c.color)}`);
+  if (c.bg) s.push(`background:${cssColor(c.bg)}`);
+  if (c.align) s.push(`text-align:${c.align}`);
+  if (c.border) s.push(borderCss(c.border));
+  return s.join(';');
+}
+
+function cssColor(raw) {
+  if (!raw) return '';
+  const t = String(raw).trim();
+  if (t.startsWith('#')) return t;
+  if (t.includes(',')) {
+    const [r, g, b] = t.split(',').map(s => parseInt(s.trim(), 10));
+    if ([r, g, b].every(n => Number.isFinite(n))) return `rgb(${r}, ${g}, ${b})`;
+  }
+  return t; // assume named CSS color
+}
+
+function borderCss(kind) {
+  const line = '1px solid #888';
+  switch (kind) {
+    case 'all':
+    case 'outline':  return `border:${line}`;
+    case 'top':      return `border-top:${line}`;
+    case 'bottom':   return `border-bottom:${line}`;
+    case 'left':     return `border-left:${line}`;
+    case 'right':    return `border-right:${line}`;
+    default:         return '';
+  }
+}
+
+function renderHeader(file) {
+  const h = document.getElementById('header');
+  if (!file) {
+    h.innerHTML = '<span class="empty">no workbook open</span>';
+    return;
+  }
+  const dirty = file.dirty ? '<span class="dirty">●</span>' : '';
+  h.innerHTML = `<span class="file">${escapeHtml(file.path)}</span>${dirty}<span class="muted">${file.sheets.length} sheet(s)</span>`;
+}
+
+function renderTabs(file) {
+  const t = document.getElementById('tabs');
+  t.innerHTML = '';
+  if (!file) return;
+  for (const s of file.sheets) {
+    const el = document.createElement('div');
+    el.className = 'tab' + (s.name === activeSheetName ? ' active' : '');
+    el.textContent = s.name;
+    el.onclick = () => { activeSheetName = s.name; renderAll(); };
+    t.appendChild(el);
+  }
+}
+
+function renderGrid(file) {
+  const g = document.getElementById('grid-wrap');
+  g.innerHTML = '';
+  if (!file || file.sheets.length === 0) {
+    g.innerHTML = '<div class="empty-state">No sheets.</div>';
+    return;
+  }
+  const sheet = file.sheets.find(s => s.name === activeSheetName) || file.sheets[0];
+  if (!sheet) return;
+
+  // Determine grid extent: at least 10 cols × 20 rows for readability,
+  // expanding to fit any actual cells.
+  const minRows = 20, minCols = 10;
+  const rows = Math.max(minRows, sheet.rows || 0);
+  const cols = Math.max(minCols, sheet.cols || 0);
+
+  // Pre-bucket cells by address for O(1) lookup.
+  const byAddr = Object.create(null);
+  for (const c of sheet.cells) byAddr[c.address] = c;
+
+  const tbl = document.createElement('table');
+  tbl.className = 'grid';
+  // Header row.
+  const headRow = document.createElement('tr');
+  headRow.appendChild(document.createElement('th')); // corner
+  for (let c = 0; c < cols; c++) {
+    const th = document.createElement('th');
+    th.textContent = colLetter(c);
+    headRow.appendChild(th);
+  }
+  tbl.appendChild(headRow);
+
+  for (let r = 1; r <= rows; r++) {
+    const tr = document.createElement('tr');
+    const rowHead = document.createElement('th');
+    rowHead.className = 'row-head';
+    rowHead.textContent = String(r);
+    tr.appendChild(rowHead);
+    for (let c = 0; c < cols; c++) {
+      const td = document.createElement('td');
+      const addr = colLetter(c) + r;
+      const cell = byAddr[addr];
+      if (cell) {
+        if (cell.mergedInto) {
+          td.className = 'merged-into';
+        } else {
+          const style = cellStyle(cell);
+          if (style) td.setAttribute('style', style);
+          if (cell.formula) {
+            td.textContent = String(cell.value ?? cell.formula);
+            td.title = cell.formula;
+          } else if (cell.value !== undefined) {
+            td.textContent = String(cell.value);
+          }
+        }
+      }
+      tr.appendChild(td);
+    }
+    tbl.appendChild(tr);
+  }
+  g.appendChild(tbl);
+}
+
+function renderAll() {
+  const file = currentProps.files.find(f => f.active) || currentProps.files[0] || null;
+  if (file && !activeSheetName) {
+    const a = file.sheets.find(s => s.active);
+    activeSheetName = (a ?? file.sheets[0])?.name ?? null;
+  }
+  renderHeader(file);
+  renderTabs(file);
+  renderGrid(file);
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  })[ch]);
+}
+
+window.addEventListener('message', (e) => {
+  const data = e.data;
+  if (!data || typeof data !== 'object') return;
+  if (data.type === 'xl:render') {
+    currentProps = data.props || { files: [] };
+    activeSheetName = null;
+    renderAll();
+  }
+});
+
+renderAll();
+</script>
+</body>
+</html>

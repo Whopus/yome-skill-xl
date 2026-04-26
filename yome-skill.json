@@ -1,0 +1,87 @@
+{
+  "$schema": "https://yome.work/schema/yome-skill.json",
+  "slug": "@yome/xl",
+  "name": "Excel",
+  "description": "Excel 工作簿编辑命令（open/new/save/close/books/sheets/sheet.*/get/range/used/find/set/fill/clear/fmt/width/merge/unmerge/export）",
+  "domain": "xl",
+  "version": "1.0.0",
+  "official": true,
+  "homepage": "https://yome.work/skills/@yome/xl",
+  "repo": "https://github.com/Whopus/yome-skill-xl",
+  "yome_min_version": "1.0.0",
+  "platforms": ["macos", "ios", "node", "sandbox"],
+  "delivery": {
+    "macos": {
+      "backend": "bundled",
+      "min_app_version": "1.0.0",
+      "implements_signature": ">=1.0.0 <2.0.0"
+    },
+    "ios": {
+      "backend": "bundled",
+      "min_app_version": "1.0.0",
+      "implements_signature": ">=1.0.0 <2.0.0"
+    },
+    "node": {
+      "backend": "ota",
+      "package": "backends/node",
+      "entry": "src/index.ts",
+      "implements_signature": ">=1.0.0 <2.0.0"
+    },
+    "sandbox": {
+      "backend": "ota",
+      "package": "backends/sandbox",
+      "entry": "src/index.ts",
+      "implements_signature": ">=1.0.0 <2.0.0"
+    }
+  },
+  "ota_overlay": {
+    "signature_version": "1.0.0",
+    "viewer_version": "1.0.0",
+    "data_version": "1.0.0"
+  },
+  "capabilities": ["fs:read", "fs:write", "applescript"],
+  "system_capabilities": ["fs:read", "fs:write", "applescript"],
+  "permissions_summary": {
+    "zh": "读写 .xlsx/.xls 文件，调用 macOS Microsoft Excel",
+    "en": "Read/write .xlsx/.xls files, control macOS Microsoft Excel"
+  },
+  "l1": {
+    "when": "user wants to read / edit / format / export an Excel workbook (.xlsx, .xls)",
+    "entry": "xl --help",
+    "effects": "opens or modifies a workbook in Microsoft Excel; writes .xlsx / .pdf / .csv to disk"
+  },
+  "tags": ["productivity", "office", "spreadsheet"],
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Yome Official",
+    "github": "Whopus"
+  },
+  "commands": [
+    { "action": "open",         "desc": "打开已有 .xlsx/.xls 文件" },
+    { "action": "new",          "desc": "新建空白工作簿" },
+    { "action": "save",         "desc": "保存当前工作簿（可另存为）" },
+    { "action": "close",        "desc": "关闭当前工作簿" },
+    { "action": "books",        "desc": "列出已打开的工作簿" },
+    { "action": "sheets",       "desc": "列出当前工作簿的所有工作表" },
+    { "action": "sheet",        "desc": "切换活动工作表" },
+    { "action": "sheet.add",    "desc": "新建工作表" },
+    { "action": "sheet.rename", "desc": "重命名工作表" },
+    { "action": "sheet.delete", "desc": "删除工作表" },
+    { "action": "get",          "desc": "读取单个单元格" },
+    { "action": "range",        "desc": "读取一片范围（TSV）" },
+    { "action": "used",         "desc": "返回活动表已用范围与行列数" },
+    { "action": "find",         "desc": "搜索关键词" },
+    { "action": "set",          "desc": "写入单元格值或公式" },
+    { "action": "fill",         "desc": "批量填充范围（TSV）" },
+    { "action": "clear",        "desc": "清除范围内容" },
+    { "action": "fmt",          "desc": "格式化单元格（粗体/字号/颜色/背景/对齐/数字格式/边框）" },
+    { "action": "width",        "desc": "设置列宽" },
+    { "action": "row.add",      "desc": "插入行" },
+    { "action": "row.delete",   "desc": "删除行" },
+    { "action": "col.add",      "desc": "插入列" },
+    { "action": "col.delete",   "desc": "删除列" },
+    { "action": "merge",        "desc": "合并单元格" },
+    { "action": "unmerge",      "desc": "取消合并" },
+    { "action": "export",       "desc": "导出为 PDF / CSV" }
+  ]
+}

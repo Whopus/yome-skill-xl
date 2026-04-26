@@ -1,0 +1,217 @@
+{
+  "$schema": "https://yome.work/schema/signature.json",
+  "domain": "xl",
+  "signature_version": "1.0.0",
+  "label": { "zh": "Excel 表格", "en": "Excel Spreadsheet" },
+  "helpSummary": "open, new, save, close, books, sheets, sheet, sheet.add, sheet.rename, sheet.delete, get, range, used, find, set, fill, clear, fmt, width, row.add, row.delete, col.add, col.delete, merge, unmerge, export, batch",
+  "docs": {
+    "zh": "\n## xl 命令 — Excel 表格\n\n### 工作簿\nxl open <文件路径>                    打开 .xlsx/.xls 文件\nxl new [<路径>] [--force]              新建工作簿（给路径则直接落盘）\nxl save [--path=<另存路径>] [--force]  保存（可另存为）\nxl close [--save=true|false]           关闭\nxl books                               列出所有打开的工作簿\n\n### 工作表\nxl sheets                              列出工作表（名称、行、列、是否活动）\nxl sheet <名称>                        切换活动工作表\nxl sheet.add --name=<名称>             新建工作表\nxl sheet.rename <旧名> --name=<新名>   重命名\nxl sheet.delete <名称>                 删除\n\n### 读取\nxl get <单元格> [--format=json|tsv|raw]  读取单元格 (A1, Sheet2@B3)\nxl range <范围>                        读取范围返回 TSV (A1:C10, Sheet2@A1:D100)\nxl used                                返回已用范围 + 行列数\nxl find <关键词> [--in=<范围>]         搜索内容\n\n### 写入\nxl set <单元格> --value=<值> [--type=text|number|auto]  写入值（auto: 数字串按数字写）\nxl set <单元格> --formula=<公式>       写入公式 (如 =SUM(A1:A10))\nxl fill <范围> --values=<TSV>          批量填充（TAB 分列、\\n 分行）\nxl clear <范围>                        清除内容\n\n### 行列\nxl row.add <行号> [--count=1]          在指定行号前插入行\nxl row.delete <行号> [--count=1]       删除指定行\nxl col.add <列号> [--count=1]          在指定列前插入列 (列号: A/B/C...)\nxl col.delete <列号> [--count=1]       删除指定列\nxl width <列号> --size=<宽度>          设置列宽\n\n### 格式\nxl fmt <范围> [--bold] [--italic] [--size=<字号>] [--color=<颜色>] [--bg=<背景色>] [--align=left|center|right] [--numfmt=<格式串>] [--border=<样式>]\n  颜色/背景: 名称(black/red/blue/...) | #RRGGBB | R,G,B\n  numfmt 示例: '0.00' / '0%' / 'yyyy-mm-dd' / '#,##0.00'\n  border: all|top|bottom|left|right|outline （默认 thin 黑色实线）\n  所有参数可任意组合，单个属性失败不影响其他属性\nxl merge <范围>                        合并单元格\nxl unmerge <范围>                      取消合并\n\n### 导出\nxl export --format=pdf|csv --path=<输出路径> [--force]\n\n范围语法: A1 | A1:C10 | Sheet@A1 | Sheet@A1:C10\n路径: ~ 为主目录，相对路径基于 ~/Desktop\n除 open/new/books 外，所有命令作用于当前活动工作簿（需先 open 或 new）\n",
+    "en": "\n## xl command — Excel Spreadsheet\n\n### Workbooks\nxl open <file_path>                    Open .xlsx/.xls file\nxl new [<path>] [--force]              Create new workbook (with path: create and save)\nxl save [--path=<save_as_path>] [--force]  Save (or save as)\nxl close [--save=true|false]           Close\nxl books                               List all open workbooks\n\n### Sheets\nxl sheets                              List sheets (name, rows, cols, active)\nxl sheet <name>                        Switch active sheet\nxl sheet.add --name=<name>             Create new sheet\nxl sheet.rename <old_name> --name=<new_name>  Rename\nxl sheet.delete <name>                 Delete\n\n### Read\nxl get <cell> [--format=json|tsv|raw]  Read cell (A1, Sheet2@B3)\nxl range <range>                       Read range as TSV (A1:C10, Sheet2@A1:D100)\nxl used                                Return used range + row/col count\nxl find <keyword> [--in=<range>]       Search content\n\n### Write\nxl set <cell> --value=<value> [--type=text|number|auto]  Write value (auto: numeric string written as number)\nxl set <cell> --formula=<formula>      Write formula (e.g. =SUM(A1:A10))\nxl fill <range> --values=<TSV>         Batch fill (TAB cols, \\n rows)\nxl clear <range>                       Clear contents\n\n### Rows / Columns\nxl row.add <row_index> [--count=1]     Insert rows above row_index\nxl row.delete <row_index> [--count=1]  Delete rows starting at row_index\nxl col.add <column> [--count=1]        Insert columns before column (A/B/C...)\nxl col.delete <column> [--count=1]     Delete columns starting at column\nxl width <column> --size=<width>       Set column width\n\n### Format\nxl fmt <range> [--bold] [--italic] [--size=<font_size>] [--color=<color>] [--bg=<bg_color>] [--align=left|center|right] [--numfmt=<format_string>] [--border=<style>]\n  Colors/bg: name (black/red/blue/...) | #RRGGBB | R,G,B\n  numfmt examples: '0.00' / '0%' / 'yyyy-mm-dd' / '#,##0.00'\n  border: all|top|bottom|left|right|outline (default: thin black solid)\n  All params combine freely; a single attribute failing does not abort others\nxl merge <range>                       Merge cells\nxl unmerge <range>                     Unmerge cells\n\n### Export\nxl export --format=pdf|csv --path=<output_path> [--force]\n\nRange syntax: A1 | A1:C10 | Sheet@A1 | Sheet@A1:C10\nPath: ~ is home directory, relative paths are based on ~/Desktop\nExcept open/new/books, all commands operate on the currently active workbook (open or new first)\n"
+  },
+  "commands": {
+    "open": {
+      "usage": { "zh": "xl open <文件路径>", "en": "xl open <file_path>" },
+      "description": { "zh": "打开 .xlsx/.xls 文件", "en": "Open .xlsx/.xls file" },
+      "positional": "path",
+      "since": "1.0.0"
+    },
+    "new": {
+      "usage": { "zh": "xl new [<路径>] [--force]", "en": "xl new [<path>] [--force]" },
+      "description": { "zh": "新建工作簿（给路径则直接落盘）", "en": "Create new workbook (with path: create and save)" },
+      "positional": "path",
+      "params": {
+        "path": { "description": { "zh": "保存路径（.xlsx），与 positional 等价", "en": "Save path (.xlsx), equivalent to positional" } },
+        "force": { "description": { "zh": "路径已存在时强制覆盖", "en": "Overwrite if path already exists" } }
+      },
+      "since": "1.0.0"
+    },
+    "save": {
+      "usage": { "zh": "xl save [--path=<另存路径>] [--force]", "en": "xl save [--path=<save_as_path>] [--force]" },
+      "description": { "zh": "保存当前工作簿", "en": "Save current workbook" },
+      "params": {
+        "path": { "description": { "zh": "另存为路径", "en": "Save-as path" } },
+        "force": { "description": { "zh": "path 已存在时强制覆盖", "en": "Overwrite if path already exists" } }
+      },
+      "since": "1.0.0"
+    },
+    "close": {
+      "usage": "xl close [--save=true|false]",
+      "description": { "zh": "关闭当前工作簿", "en": "Close current workbook" },
+      "params": { "save": { "description": { "zh": "是否保存", "en": "Whether to save" }, "values": ["true", "false"] } },
+      "since": "1.0.0"
+    },
+    "books": {
+      "usage": "xl books",
+      "description": { "zh": "列出所有打开的工作簿", "en": "List all open workbooks" },
+      "compress": { "kind": "custom", "module": "backends/sandbox/src/compress.ts", "export": "compressBooks" },
+      "since": "1.0.0"
+    },
+    "sheets": {
+      "usage": "xl sheets",
+      "description": { "zh": "列出当前工作簿的所有工作表", "en": "List all sheets in current workbook" },
+      "compress": { "kind": "custom", "module": "backends/sandbox/src/compress.ts", "export": "compressSheets" },
+      "since": "1.0.0"
+    },
+    "sheet": {
+      "usage": { "zh": "xl sheet <名称>", "en": "xl sheet <name>" },
+      "description": { "zh": "切换活动工作表", "en": "Switch active sheet" },
+      "positional": "name",
+      "since": "1.0.0"
+    },
+    "sheet.add": {
+      "usage": { "zh": "xl sheet.add --name=<名称>", "en": "xl sheet.add --name=<name>" },
+      "description": { "zh": "新建工作表", "en": "Create new sheet" },
+      "params": { "name": { "required": true, "description": { "zh": "工作表名称", "en": "Sheet name" } } },
+      "since": "1.0.0"
+    },
+    "sheet.rename": {
+      "usage": { "zh": "xl sheet.rename <旧名> --name=<新名>", "en": "xl sheet.rename <old_name> --name=<new_name>" },
+      "description": { "zh": "重命名工作表", "en": "Rename sheet" },
+      "positional": "oldName",
+      "params": { "name": { "required": true, "description": { "zh": "新名称", "en": "New name" } } },
+      "since": "1.0.0"
+    },
+    "sheet.delete": {
+      "usage": { "zh": "xl sheet.delete <名称>", "en": "xl sheet.delete <name>" },
+      "description": { "zh": "删除工作表", "en": "Delete sheet" },
+      "positional": "name",
+      "since": "1.0.0"
+    },
+    "get": {
+      "usage": { "zh": "xl get <单元格> [--format=json|tsv|raw]", "en": "xl get <cell> [--format=json|tsv|raw]" },
+      "description": { "zh": "读取单元格 (A1, Sheet2@B3)。format: json(默认含值+公式) | tsv(value\\tformula) | raw(仅值)", "en": "Read cell (A1, Sheet2@B3). format: json (default, value+formula) | tsv (value\\tformula) | raw (value only)" },
+      "positional": "cell",
+      "params": { "format": { "description": { "zh": "输出格式", "en": "Output format" }, "values": ["json", "tsv", "raw"] } },
+      "since": "1.0.0"
+    },
+    "range": {
+      "usage": { "zh": "xl range <范围>", "en": "xl range <range>" },
+      "description": { "zh": "读取范围，返回 TSV (如 A1:C10, Sheet2@A1:D100)", "en": "Read range, returns TSV (e.g. A1:C10, Sheet2@A1:D100)" },
+      "positional": "range",
+      "compress": { "kind": "custom", "module": "backends/sandbox/src/compress.ts", "export": "compressRange" },
+      "since": "1.0.0"
+    },
+    "used": {
+      "usage": "xl used",
+      "description": { "zh": "返回活动工作表的已用范围和行列数", "en": "Return used range and row/column count of active sheet" },
+      "compress": { "kind": "custom", "module": "backends/sandbox/src/compress.ts", "export": "compressUsed" },
+      "since": "1.0.0"
+    },
+    "find": {
+      "usage": { "zh": "xl find <关键词> [--in=<范围>]", "en": "xl find <keyword> [--in=<range>]" },
+      "description": { "zh": "搜索内容，返回匹配的单元格地址和值", "en": "Search content, return matching cell addresses and values" },
+      "positional": "what",
+      "params": {
+        "what": { "description": { "zh": "搜索关键词（也可作为 positional）", "en": "Search keyword (also accepts positional)" } },
+        "in": { "description": { "zh": "搜索范围，默认 used range", "en": "Search range, defaults to used range" } }
+      },
+      "compress": { "kind": "custom", "module": "backends/sandbox/src/compress.ts", "export": "compressFind" },
+      "since": "1.0.0"
+    },
+    "set": {
+      "usage": { "zh": "xl set <单元格> --value=<值> [--type=text|number|auto] | --formula=<公式>", "en": "xl set <cell> --value=<value> [--type=text|number|auto] | --formula=<formula>" },
+      "description": { "zh": "写入单元格值或公式。--type 默认 auto（数字字符串按数字写入），用 --type=text 保留前导零等原样", "en": "Write cell value or formula. --type defaults to auto; use --type=text to preserve leading zeros etc." },
+      "positional": "cell",
+      "params": {
+        "value": { "description": { "zh": "写入的值", "en": "Value to write" } },
+        "formula": { "description": { "zh": "写入的公式 (如 =SUM(A1:A10))", "en": "Formula to write (e.g. =SUM(A1:A10))" } },
+        "type": { "description": { "zh": "值类型: text 强制文本; number 强制数字; auto 自动推断（默认）", "en": "Value type: text|number|auto (default)" }, "values": ["text", "number", "auto"] }
+      },
+      "since": "1.0.0"
+    },
+    "fill": {
+      "usage": { "zh": "xl fill <范围> --values=<TSV数据>", "en": "xl fill <range> --values=<TSV_data>" },
+      "description": { "zh": "批量填充（TAB 分列、\\n 分行）", "en": "Batch fill (TAB separates columns, \\n separates rows)" },
+      "positional": "range",
+      "params": { "values": { "required": true, "description": { "zh": "TSV 格式数据", "en": "TSV format data" } } },
+      "since": "1.0.0"
+    },
+    "clear": {
+      "usage": { "zh": "xl clear <范围>", "en": "xl clear <range>" },
+      "description": { "zh": "清除范围内容", "en": "Clear range contents" },
+      "positional": "range",
+      "since": "1.0.0"
+    },
+    "fmt": {
+      "usage": { "zh": "xl fmt <范围> [--bold] [--italic] [--size=<字号>] [--color=<颜色>] [--bg=<背景色>] [--align=left|center|right] [--numfmt=<格式串>] [--border=<样式>]", "en": "xl fmt <range> [--bold] [--italic] [--size=<font_size>] [--color=<color>] [--bg=<bg_color>] [--align=left|center|right] [--numfmt=<format_string>] [--border=<style>]" },
+      "description": { "zh": "格式化单元格。所有参数可任意组合；单个属性失败不影响其他属性", "en": "Format cells. All params combine freely; a single attribute failing does not abort others" },
+      "positional": "range",
+      "params": {
+        "bold":   { "description": { "zh": "加粗", "en": "Bold" } },
+        "italic": { "description": { "zh": "斜体", "en": "Italic" } },
+        "size":   { "description": { "zh": "字号", "en": "Font size" } },
+        "color":  { "description": { "zh": "字体颜色: 名称 | #RRGGBB | R,G,B", "en": "Font color: name | #RRGGBB | R,G,B" } },
+        "bg":     { "description": { "zh": "背景色: 名称 | #RRGGBB | R,G,B", "en": "Background color: name | #RRGGBB | R,G,B" } },
+        "align":  { "description": { "zh": "水平对齐", "en": "Horizontal alignment" }, "values": ["left", "center", "right"] },
+        "numfmt": { "description": { "zh": "数字格式串 (如 0.00 / 0% / yyyy-mm-dd / #,##0.00)", "en": "Number format string (e.g. 0.00 / 0% / yyyy-mm-dd / #,##0.00)" } },
+        "border": { "description": { "zh": "边框: all|top|bottom|left|right|outline", "en": "Border: all|top|bottom|left|right|outline" }, "values": ["all", "top", "bottom", "left", "right", "outline"] }
+      },
+      "since": "1.0.0"
+    },
+    "width": {
+      "usage": { "zh": "xl width <列号> --size=<宽度>", "en": "xl width <column> --size=<width>" },
+      "description": { "zh": "设置列宽 (列号: A, B, C ...)", "en": "Set column width (column: A, B, C ...)" },
+      "positional": "column",
+      "params": {
+        "size":  { "description": { "zh": "列宽数值", "en": "Column width" } },
+        "width": { "description": { "zh": "--size 的别名", "en": "Alias of --size" } }
+      },
+      "since": "1.0.0"
+    },
+    "row.add": {
+      "usage": { "zh": "xl row.add <行号> [--count=1]", "en": "xl row.add <row_index> [--count=1]" },
+      "description": { "zh": "在指定行号前插入行", "en": "Insert rows above the given row index" },
+      "positional": "row",
+      "params": { "count": { "description": { "zh": "插入数量（默认 1）", "en": "Number of rows to insert (default 1)" } } },
+      "since": "1.0.0"
+    },
+    "row.delete": {
+      "usage": { "zh": "xl row.delete <行号> [--count=1]", "en": "xl row.delete <row_index> [--count=1]" },
+      "description": { "zh": "删除指定行", "en": "Delete rows starting at row index" },
+      "positional": "row",
+      "params": { "count": { "description": { "zh": "删除数量（默认 1）", "en": "Number of rows to delete (default 1)" } } },
+      "since": "1.0.0"
+    },
+    "col.add": {
+      "usage": { "zh": "xl col.add <列号> [--count=1]", "en": "xl col.add <column> [--count=1]" },
+      "description": { "zh": "在指定列前插入列 (列号: A/B/C...)", "en": "Insert columns before column (A/B/C...)" },
+      "positional": "column",
+      "params": { "count": { "description": { "zh": "插入数量（默认 1）", "en": "Number of columns to insert (default 1)" } } },
+      "since": "1.0.0"
+    },
+    "col.delete": {
+      "usage": { "zh": "xl col.delete <列号> [--count=1]", "en": "xl col.delete <column> [--count=1]" },
+      "description": { "zh": "删除指定列", "en": "Delete columns starting at column" },
+      "positional": "column",
+      "params": { "count": { "description": { "zh": "删除数量（默认 1）", "en": "Number of columns to delete (default 1)" } } },
+      "since": "1.0.0"
+    },
+    "merge": {
+      "usage": { "zh": "xl merge <范围>", "en": "xl merge <range>" },
+      "description": { "zh": "合并单元格", "en": "Merge cells" },
+      "positional": "range",
+      "since": "1.0.0"
+    },
+    "unmerge": {
+      "usage": { "zh": "xl unmerge <范围>", "en": "xl unmerge <range>" },
+      "description": { "zh": "取消合并", "en": "Unmerge cells" },
+      "positional": "range",
+      "since": "1.0.0"
+    },
+    "export": {
+      "usage": { "zh": "xl export --format=<格式> --path=<输出路径> [--force]", "en": "xl export --format=<format> --path=<output_path> [--force]" },
+      "description": { "zh": "导出当前工作簿", "en": "Export current workbook" },
+      "params": {
+        "format": { "required": true, "description": { "zh": "导出格式", "en": "Export format" }, "values": ["pdf", "csv"] },
+        "path":   { "required": true, "description": { "zh": "输出路径", "en": "Output path" } },
+        "force":  { "description": { "zh": "path 已存在时强制覆盖", "en": "Overwrite if path already exists" } }
+      },
+      "since": "1.0.0"
+    }
+  },
+  "compactDocs": {
+    "zh": "xl — Excel: open/new [<path>] [--force]/save/close/books | sheets/sheet/sheet.add/sheet.rename/sheet.delete | get <cell> [--format] | range <range>(TSV) | used | find <kw> [--in] | set <cell> --value [--type] / --formula | fill <range> --values(TSV) | clear | fmt [--bold --italic --size --color --bg --align --numfmt --border] | width <col> --size | row.add/row.delete/col.add/col.delete [--count] | merge/unmerge | export --format=pdf|csv --path  Range: A1 | A1:C10 | Sheet@A1",
+    "en": "xl — Excel: open/new [<path>] [--force]/save/close/books | sheets/sheet/sheet.add/sheet.rename/sheet.delete | get <cell> [--format] | range <range>(TSV) | used | find <kw> [--in] | set <cell> --value [--type] / --formula | fill <range> --values(TSV) | clear | fmt [--bold --italic --size --color --bg --align --numfmt --border] | width <col> --size | row.add/row.delete/col.add/col.delete [--count] | merge/unmerge | export --format=pdf|csv --path  Range: A1 | A1:C10 | Sheet@A1"
+  },
+  "batchable": true
+}

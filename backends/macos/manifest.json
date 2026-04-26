@@ -1,0 +1,202 @@
+{
+  "$comment": "Declarative macOS backend for @yome/xl. Consumed by cli/src/skills/runner/dispatcher.ts. Each action maps to one .applescript template; placeholders {{name}} / {{name|json}} / {{name|posix}} / {{name|bool}} / {{name|as_int}} are filled from positionals/flags before osascript runs. Mirror of Yome/macOS/Bridge/ExcelBridge.swift.",
+  "appBundleId": "com.microsoft.Excel",
+  "appName": "Microsoft Excel",
+  "actions": {
+    "open": {
+      "script": "open.applescript",
+      "openViaLaunchServices": true,
+      "pollScript": "open.poll.applescript",
+      "args": [
+        { "name": "path", "from": "positional|--path", "required": true }
+      ],
+      "uses": ["fs:read", "applescript"]
+    },
+    "new": {
+      "script": "new.applescript",
+      "args": [
+        { "name": "path", "from": "positional|--path", "default": "" }
+      ],
+      "uses": ["fs:write", "applescript"]
+    },
+    "save": {
+      "script": "save.applescript",
+      "args": [
+        { "name": "path", "from": "--path", "default": "" }
+      ],
+      "uses": ["fs:write", "applescript"]
+    },
+    "close": {
+      "script": "close.applescript",
+      "args": [
+        { "name": "save", "from": "--save", "default": "true" }
+      ],
+      "uses": ["applescript"]
+    },
+    "books": {
+      "script": "books.applescript",
+      "uses": ["applescript"]
+    },
+    "sheets": {
+      "script": "sheets.applescript",
+      "uses": ["applescript"]
+    },
+    "sheet": {
+      "script": "sheet.applescript",
+      "args": [
+        { "name": "name", "from": "positional|--name", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "sheet.add": {
+      "script": "sheet.add.applescript",
+      "args": [
+        { "name": "name", "from": "--name", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "sheet.rename": {
+      "script": "sheet.rename.applescript",
+      "args": [
+        { "name": "oldName", "from": "positional|--oldName", "required": true },
+        { "name": "name",    "from": "--name",                "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "sheet.delete": {
+      "script": "sheet.delete.applescript",
+      "args": [
+        { "name": "name", "from": "positional|--name", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "get": {
+      "script": "get.applescript",
+      "args": [
+        { "name": "cell", "from": "positional|--cell", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "range": {
+      "script": "range.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "used": {
+      "script": "used.applescript",
+      "uses": ["applescript"]
+    },
+    "find": {
+      "script": "find.applescript",
+      "args": [
+        { "name": "what", "from": "positional|--what", "required": true },
+        { "name": "in",   "from": "--in",              "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "set": {
+      "script": "set.applescript",
+      "args": [
+        { "name": "cell",    "from": "positional|--cell", "required": true },
+        { "name": "value",   "from": "--value",           "default": "" },
+        { "name": "formula", "from": "--formula",         "default": "" },
+        { "name": "type",    "from": "--type",            "default": "auto" }
+      ],
+      "uses": ["applescript"]
+    },
+    "fill": {
+      "script": "fill.applescript",
+      "args": [
+        { "name": "range",  "from": "positional|--range", "required": true },
+        { "name": "values", "from": "--values",           "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "clear": {
+      "script": "clear.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "fmt": {
+      "script": "fmt.applescript",
+      "args": [
+        { "name": "range",  "from": "positional|--range", "required": true },
+        { "name": "bold",   "from": "--bold",   "type": "bool", "default": false },
+        { "name": "italic", "from": "--italic", "type": "bool", "default": false },
+        { "name": "size",   "from": "--size",   "default": "" },
+        { "name": "color",  "from": "--color",  "default": "" },
+        { "name": "bg",     "from": "--bg",     "default": "" },
+        { "name": "align",  "from": "--align",  "default": "" },
+        { "name": "numfmt", "from": "--numfmt", "default": "" },
+        { "name": "border", "from": "--border", "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "width": {
+      "script": "width.applescript",
+      "args": [
+        { "name": "column", "from": "positional|--column", "required": true },
+        { "name": "size",   "from": "--size|--width",      "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "row.add": {
+      "script": "row.add.applescript",
+      "args": [
+        { "name": "row",   "from": "positional|--row", "required": true },
+        { "name": "count", "from": "--count",          "default": "1" }
+      ],
+      "uses": ["applescript"]
+    },
+    "row.delete": {
+      "script": "row.delete.applescript",
+      "args": [
+        { "name": "row",   "from": "positional|--row", "required": true },
+        { "name": "count", "from": "--count",          "default": "1" }
+      ],
+      "uses": ["applescript"]
+    },
+    "col.add": {
+      "script": "col.add.applescript",
+      "args": [
+        { "name": "column", "from": "positional|--column", "required": true },
+        { "name": "count",  "from": "--count",             "default": "1" }
+      ],
+      "uses": ["applescript"]
+    },
+    "col.delete": {
+      "script": "col.delete.applescript",
+      "args": [
+        { "name": "column", "from": "positional|--column", "required": true },
+        { "name": "count",  "from": "--count",             "default": "1" }
+      ],
+      "uses": ["applescript"]
+    },
+    "merge": {
+      "script": "merge.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "unmerge": {
+      "script": "unmerge.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "export": {
+      "script": "export.applescript",
+      "args": [
+        { "name": "format", "from": "--format", "required": true },
+        { "name": "path",   "from": "--path",   "required": true }
+      ],
+      "uses": ["fs:write", "applescript"]
+    }
+  }
+}
