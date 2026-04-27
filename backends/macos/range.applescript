@@ -1,5 +1,13 @@
 -- xl range <range> — returns TSV (rows separated by linefeed, cols by tab).
 -- Supports Sheet@A1:C10 syntax.
+--
+-- See note in fill.applescript: inside `tell application "Microsoft Excel"`
+-- the bare `tab` identifier resolves to Excel's *Tab* terminology, not the
+-- ASCII TAB character — concatenating with it produces the literal "tab"
+-- string and corrupts every TSV consumer. Capture the real chars first.
+set TAB_CHAR to (ASCII character 9)
+set LF_CHAR to (ASCII character 10)
+
 set rawRef to {{range|json}}
 set sheetName to ""
 set addr to rawRef
@@ -25,10 +33,10 @@ tell application "Microsoft Excel"
             set rowData to ""
             repeat with j from 1 to colCount
                 set cellVal to (value of cell i of column j of r) as string
-                if j > 1 then set rowData to rowData & tab
+                if j > 1 then set rowData to rowData & TAB_CHAR
                 set rowData to rowData & cellVal
             end repeat
-            if i > 1 then set output to output & linefeed
+            if i > 1 then set output to output & LF_CHAR
             set output to output & rowData
         end repeat
         return output

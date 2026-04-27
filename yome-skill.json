@@ -4,7 +4,7 @@
   "name": "Excel",
   "description": "Excel 工作簿编辑命令（open/new/save/close/books/sheets/sheet.*/get/range/used/find/set/fill/clear/fmt/width/merge/unmerge/export）",
   "domain": "xl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "official": true,
   "homepage": "https://yome.work/skills/@yome/xl",
   "repo": "https://github.com/Whopus/yome-skill-xl",

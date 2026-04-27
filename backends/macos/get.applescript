@@ -1,5 +1,10 @@
 -- xl get <cell> — returns "value\tformula"
 -- Supports Sheet@A1 syntax via on-the-fly @-split.
+--
+-- See fill.applescript: bare `tab` inside `tell application "Microsoft Excel"`
+-- is Excel's terminology, not the TAB character. Always use TAB_CHAR.
+set TAB_CHAR to (ASCII character 9)
+
 set rawRef to {{cell|json}}
 set sheetName to ""
 set addr to rawRef
@@ -19,6 +24,6 @@ tell application "Microsoft Excel"
     tell targetSheet
         set cellVal to value of cell addr
         set cellFormula to formula of cell addr
-        return (cellVal as string) & tab & cellFormula
+        return (cellVal as string) & TAB_CHAR & cellFormula
     end tell
 end tell
