@@ -6,7 +6,14 @@ tell application "Microsoft Excel"
     make new workbook
     delay 0.5
     {{#if path}}
-    save active workbook in {{path|json}}
+    set display alerts to false
+    try
+        save active workbook in {{path|json}}
+        set display alerts to true
+    on error errMsg number errNum
+        set display alerts to true
+        error errMsg number errNum
+    end try
     {{/if}}
     return name of active workbook
 end tell

@@ -6,7 +6,14 @@ tell application "Microsoft Excel"
     if saveAsPath is "" then
         save active workbook
     else
-        save active workbook in saveAsPath
+        set display alerts to false
+        try
+            save active workbook in saveAsPath
+            set display alerts to true
+        on error errMsg number errNum
+            set display alerts to true
+            error errMsg number errNum
+        end try
     end if
     return name of active workbook
 end tell
