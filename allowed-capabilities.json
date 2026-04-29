@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "allowed": [
+    "applescript",
+    "fs:read",
+    "fs:write"
+  ],
+  "granted_at": "2026-04-27T11:37:54.371Z",
+  "granted_by": "user"
+}
