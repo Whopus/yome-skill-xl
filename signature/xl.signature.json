@@ -1,9 +1,9 @@
 {
   "$schema": "https://yome.work/schema/signature.json",
   "domain": "xl",
-  "signature_version": "1.0.0",
+  "signature_version": "1.1.0",
   "label": { "zh": "Excel 表格", "en": "Excel Spreadsheet" },
-  "helpSummary": "open, new, save, close, books, sheets, sheet, sheet.add, sheet.rename, sheet.delete, get, range, used, find, set, fill, clear, fmt, width, row.add, row.delete, col.add, col.delete, merge, unmerge, export, batch",
+  "helpSummary": "open, new, save, close, books, sheets, sheet, sheet.add, sheet.rename, sheet.delete, sheet.copy, sheet.move, sheet.hide, sheet.protect, sheet.unprotect, sheet.color, get, range, used, find, set, fill, clear, fmt, width, height, row.add, row.delete, row.hide, col.add, col.delete, col.hide, insert, delete, autofill, autofit, sort, filter, filter.clear, freeze, freeze.clear, copy, cut, paste, merge, unmerge, wrap, rotate, indent, group, ungroup, comment, comment.delete, link, name, cf, validation, chart.add, chart.delete, chart.export, image.add, shape.add, pivot.add, pivot.refresh, pivot.field, page, printarea, print, view, zoom, gridlines, headings, recalc, protect.book, props, screen, alerts, undo, export, batch",
   "docs": {
     "zh": "\n## xl 命令 — Excel 表格\n\n### 工作簿\nxl open <文件路径>                    打开 .xlsx/.xls 文件\nxl new [<路径>] [--force]              新建工作簿（给路径则直接落盘）\nxl save [--path=<另存路径>] [--force]  保存（可另存为）\nxl close [--save=true|false]           关闭\nxl books                               列出所有打开的工作簿\n\n### 工作表\nxl sheets                              列出工作表（名称、行、列、是否活动）\nxl sheet <名称>                        切换活动工作表\nxl sheet.add --name=<名称>             新建工作表\nxl sheet.rename <旧名> --name=<新名>   重命名\nxl sheet.delete <名称>                 删除\n\n### 读取\nxl get <单元格> [--format=json|tsv|raw]  读取单元格 (A1, Sheet2@B3)\nxl range <范围>                        读取范围返回 TSV (A1:C10, Sheet2@A1:D100)\nxl used                                返回已用范围 + 行列数\nxl find <关键词> [--in=<范围>]         搜索内容\n\n### 写入\nxl set <单元格> --value=<值> [--type=text|number|auto]  写入值（auto: 数字串按数字写）\nxl set <单元格> --formula=<公式>       写入公式 (如 =SUM(A1:A10))\nxl fill <范围> --values=<TSV>          批量填充（TAB 分列、\\n 分行）\nxl clear <范围>                        清除内容\n\n### 行列\nxl row.add <行号> [--count=1]          在指定行号前插入行\nxl row.delete <行号> [--count=1]       删除指定行\nxl col.add <列号> [--count=1]          在指定列前插入列 (列号: A/B/C...)\nxl col.delete <列号> [--count=1]       删除指定列\nxl width <列号> --size=<宽度>          设置列宽\n\n### 格式\nxl fmt <范围> [--bold] [--italic] [--size=<字号>] [--color=<颜色>] [--bg=<背景色>] [--align=left|center|right] [--numfmt=<格式串>] [--border=<样式>]\n  颜色/背景: 名称(black/red/blue/...) | #RRGGBB | R,G,B\n  numfmt 示例: '0.00' / '0%' / 'yyyy-mm-dd' / '#,##0.00'\n  border: all|top|bottom|left|right|outline （默认 thin 黑色实线）\n  所有参数可任意组合，单个属性失败不影响其他属性\nxl merge <范围>                        合并单元格\nxl unmerge <范围>                      取消合并\n\n### 导出\nxl export --format=pdf|csv --path=<输出路径> [--force]\n\n范围语法: A1 | A1:C10 | Sheet@A1 | Sheet@A1:C10\n路径: ~ 为主目录，相对路径基于 ~/Desktop\n除 open/new/books 外，所有命令作用于当前活动工作簿（需先 open 或 new）\n",
     "en": "\n## xl command — Excel Spreadsheet\n\n### Workbooks\nxl open <file_path>                    Open .xlsx/.xls file\nxl new [<path>] [--force]              Create new workbook (with path: create and save)\nxl save [--path=<save_as_path>] [--force]  Save (or save as)\nxl close [--save=true|false]           Close\nxl books                               List all open workbooks\n\n### Sheets\nxl sheets                              List sheets (name, rows, cols, active)\nxl sheet <name>                        Switch active sheet\nxl sheet.add --name=<name>             Create new sheet\nxl sheet.rename <old_name> --name=<new_name>  Rename\nxl sheet.delete <name>                 Delete\n\n### Read\nxl get <cell> [--format=json|tsv|raw]  Read cell (A1, Sheet2@B3)\nxl range <range>                       Read range as TSV (A1:C10, Sheet2@A1:D100)\nxl used                                Return used range + row/col count\nxl find <keyword> [--in=<range>]       Search content\n\n### Write\nxl set <cell> --value=<value> [--type=text|number|auto]  Write value (auto: numeric string written as number)\nxl set <cell> --formula=<formula>      Write formula (e.g. =SUM(A1:A10))\nxl fill <range> --values=<TSV>         Batch fill (TAB cols, \\n rows)\nxl clear <range>                       Clear contents\n\n### Rows / Columns\nxl row.add <row_index> [--count=1]     Insert rows above row_index\nxl row.delete <row_index> [--count=1]  Delete rows starting at row_index\nxl col.add <column> [--count=1]        Insert columns before column (A/B/C...)\nxl col.delete <column> [--count=1]     Delete columns starting at column\nxl width <column> --size=<width>       Set column width\n\n### Format\nxl fmt <range> [--bold] [--italic] [--size=<font_size>] [--color=<color>] [--bg=<bg_color>] [--align=left|center|right] [--numfmt=<format_string>] [--border=<style>]\n  Colors/bg: name (black/red/blue/...) | #RRGGBB | R,G,B\n  numfmt examples: '0.00' / '0%' / 'yyyy-mm-dd' / '#,##0.00'\n  border: all|top|bottom|left|right|outline (default: thin black solid)\n  All params combine freely; a single attribute failing does not abort others\nxl merge <range>                       Merge cells\nxl unmerge <range>                     Unmerge cells\n\n### Export\nxl export --format=pdf|csv --path=<output_path> [--force]\n\nRange syntax: A1 | A1:C10 | Sheet@A1 | Sheet@A1:C10\nPath: ~ is home directory, relative paths are based on ~/Desktop\nExcept open/new/books, all commands operate on the currently active workbook (open or new first)\n"
@@ -207,11 +207,482 @@
         "force":  { "description": { "zh": "path 已存在时强制覆盖", "en": "Overwrite if path already exists" } }
       },
       "since": "1.0.0"
+    },
+
+    "sort": {
+      "usage": { "zh": "xl sort <范围> --by=<列1>[,<列2>[,<列3>]] [--order=asc|desc[,...]] [--header=true|false]", "en": "xl sort <range> --by=<col1>[,<col2>[,<col3>]] [--order=asc|desc[,...]] [--header=true|false]" },
+      "description": { "zh": "排序范围（最多 3 个排序键）", "en": "Sort range (up to 3 sort keys)" },
+      "positional": "range",
+      "params": {
+        "by":     { "required": true, "description": { "zh": "排序列字母（A,B,...），逗号分隔多列", "en": "Sort column letter(s) (A,B,...), comma-separated" } },
+        "order":  { "description": { "zh": "顺序 asc|desc，逗号分隔，对应 --by", "en": "Order asc|desc, comma-separated, paired with --by" } },
+        "header": { "description": { "zh": "首行是否表头", "en": "Whether first row is header" }, "values": ["true", "false"] }
+      },
+      "since": "1.1.0"
+    },
+    "filter": {
+      "usage": { "zh": "xl filter <范围> [--field=<n>] [--criteria1=<v>] [--criteria2=<v>] [--op=and|or]", "en": "xl filter <range> [--field=<n>] [--criteria1=<v>] [--criteria2=<v>] [--op=and|or]" },
+      "description": { "zh": "在范围上启用自动筛选；指定 field/criteria1 时立即应用", "en": "Enable auto-filter on range; with field/criteria1 also applies the filter" },
+      "positional": "range",
+      "params": {
+        "field":     { "description": { "zh": "字段序号（从 1 开始）", "en": "Field index (1-based)" } },
+        "criteria1": { "description": { "zh": "筛选条件 1（如 '>=10' 或 '苹果'）", "en": "Criteria 1 (e.g. '>=10' or 'Apple')" } },
+        "criteria2": { "description": { "zh": "筛选条件 2", "en": "Criteria 2" } },
+        "op":        { "description": { "zh": "条件之间的关系", "en": "Operator between criteria" }, "values": ["and", "or"] }
+      },
+      "since": "1.1.0"
+    },
+    "filter.clear": {
+      "usage": "xl filter.clear",
+      "description": { "zh": "清除当前工作表的所有筛选", "en": "Clear all filters on active sheet" },
+      "params": {},
+      "since": "1.1.0"
+    },
+    "freeze": {
+      "usage": "xl freeze [--row=<n>] [--col=<n>]",
+      "description": { "zh": "冻结窗格（在 row 之上、col 之左）", "en": "Freeze panes (above row, left of col)" },
+      "params": {
+        "row": { "description": { "zh": "冻结行数", "en": "Rows to freeze" } },
+        "col": { "description": { "zh": "冻结列数", "en": "Columns to freeze" } }
+      },
+      "since": "1.1.0"
+    },
+    "freeze.clear": {
+      "usage": "xl freeze.clear",
+      "description": { "zh": "取消冻结窗格", "en": "Unfreeze panes" },
+      "params": {},
+      "since": "1.1.0"
+    },
+    "autofit": {
+      "usage": { "zh": "xl autofit <范围> [--axis=col|row|both]", "en": "xl autofit <range> [--axis=col|row|both]" },
+      "description": { "zh": "自动调整列宽 / 行高", "en": "Auto-fit column width / row height" },
+      "positional": "range",
+      "params": { "axis": { "description": { "zh": "调整轴向", "en": "Axis" }, "values": ["col", "row", "both"] } },
+      "since": "1.1.0"
+    },
+    "copy": {
+      "usage": { "zh": "xl copy <范围>", "en": "xl copy <range>" },
+      "description": { "zh": "复制范围到剪贴板", "en": "Copy range to clipboard" },
+      "positional": "range",
+      "since": "1.1.0"
+    },
+    "cut": {
+      "usage": { "zh": "xl cut <范围>", "en": "xl cut <range>" },
+      "description": { "zh": "剪切范围到剪贴板", "en": "Cut range to clipboard" },
+      "positional": "range",
+      "since": "1.1.0"
+    },
+    "paste": {
+      "usage": { "zh": "xl paste <目标> [--what=all|values|formulas|formats|comments] [--transpose=true|false]", "en": "xl paste <dest> [--what=all|values|formulas|formats|comments] [--transpose=true|false]" },
+      "description": { "zh": "粘贴到目标范围（默认 all）", "en": "Paste to destination (default all)" },
+      "positional": "dest",
+      "params": {
+        "what":      { "description": { "zh": "粘贴内容", "en": "Paste content" }, "values": ["all", "values", "formulas", "formats", "comments"] },
+        "transpose": { "description": { "zh": "是否转置", "en": "Transpose" }, "values": ["true", "false"] }
+      },
+      "since": "1.1.0"
+    },
+    "page": {
+      "usage": "xl page [--orientation=portrait|landscape] [--paper=letter|legal|a4|a3] [--fit=W,H] [--header=str] [--footer=str] [--margin=N|T,B,L,R]",
+      "description": { "zh": "页面设置", "en": "Page setup" },
+      "params": {
+        "orientation": { "description": { "zh": "纸张方向", "en": "Orientation" }, "values": ["portrait", "landscape"] },
+        "paper":       { "description": { "zh": "纸张大小", "en": "Paper size" }, "values": ["letter", "legal", "a4", "a3"] },
+        "fit":         { "description": { "zh": "缩放至 W 页宽 H 页高", "en": "Fit to W pages wide, H pages tall" } },
+        "header":      { "description": { "zh": "中间页眉", "en": "Center header" } },
+        "footer":      { "description": { "zh": "中间页脚", "en": "Center footer" } },
+        "margin":      { "description": { "zh": "页边距：单值或 T,B,L,R", "en": "Margin: single value or T,B,L,R" } }
+      },
+      "since": "1.1.0"
+    },
+    "printarea": {
+      "usage": { "zh": "xl printarea <范围>  (空或 'clear' 清除)", "en": "xl printarea <range>  ('' or 'clear' to clear)" },
+      "description": { "zh": "设置/清除打印区域", "en": "Set/clear print area" },
+      "positional": "range",
+      "since": "1.1.0"
+    },
+    "print": {
+      "usage": "xl print [--copies=1] [--scope=workbook|sheet]",
+      "description": { "zh": "打印", "en": "Print" },
+      "params": {
+        "copies": { "description": { "zh": "份数", "en": "Number of copies" } },
+        "scope":  { "description": { "zh": "范围", "en": "Scope" }, "values": ["workbook", "sheet"] }
+      },
+      "since": "1.1.0"
+    },
+
+    "chart.add": {
+      "usage": { "zh": "xl chart.add --range=<源范围> [--type=column|bar|line|pie|area|scatter] [--title=<标题>] [--left/--top/--width/--height] [--dest=<锚定单元格>]", "en": "xl chart.add --range=<source> [--type=column|bar|line|pie|area|scatter] [--title=<title>] [--left/--top/--width/--height] [--dest=<anchor_cell>]" },
+      "description": { "zh": "新建图表对象", "en": "Create new chart object" },
+      "params": {
+        "range":  { "required": true, "description": { "zh": "数据源范围", "en": "Source data range" } },
+        "type":   { "description": { "zh": "图表类型", "en": "Chart type" }, "values": ["column", "bar", "line", "pie", "area", "scatter"] },
+        "title":  { "description": { "zh": "标题", "en": "Title" } },
+        "left":   { "description": { "zh": "左偏移（点）", "en": "Left position (points)" } },
+        "top":    { "description": { "zh": "顶偏移（点）", "en": "Top position (points)" } },
+        "width":  { "description": { "zh": "宽度（点）", "en": "Width (points)" } },
+        "height": { "description": { "zh": "高度（点）", "en": "Height (points)" } },
+        "dest":   { "description": { "zh": "锚定单元格 (如 A10)", "en": "Anchor cell (e.g. A10)" } }
+      },
+      "since": "1.1.0"
+    },
+    "chart.delete": {
+      "usage": { "zh": "xl chart.delete <图表名>  (* 删除全部)", "en": "xl chart.delete <chart_name>  (* deletes all)" },
+      "description": { "zh": "删除图表对象", "en": "Delete chart object" },
+      "positional": "name",
+      "since": "1.1.0"
+    },
+    "chart.export": {
+      "usage": { "zh": "xl chart.export <图表名> --path=<file> [--format=png|jpg|gif]", "en": "xl chart.export <chart_name> --path=<file> [--format=png|jpg|gif]" },
+      "description": { "zh": "导出图表为图片", "en": "Export chart as image" },
+      "positional": "name",
+      "params": {
+        "path":   { "required": true, "description": { "zh": "输出路径", "en": "Output path" } },
+        "format": { "description": { "zh": "格式", "en": "Format" }, "values": ["png", "jpg", "gif"] }
+      },
+      "since": "1.1.0"
+    },
+    "image.add": {
+      "usage": "xl image.add --path=<image> [--cell=A1 | --left=N --top=N] [--width=N] [--height=N]",
+      "description": { "zh": "插入图片（cell 锚定优先于 left/top）", "en": "Insert picture (cell anchor takes priority)" },
+      "params": {
+        "path":   { "required": true, "description": { "zh": "图片路径", "en": "Image path" } },
+        "cell":   { "description": { "zh": "锚定单元格", "en": "Anchor cell" } },
+        "left":   { "description": { "zh": "左偏移", "en": "Left position" } },
+        "top":    { "description": { "zh": "顶偏移", "en": "Top position" } },
+        "width":  { "description": { "zh": "宽度（0=原始）", "en": "Width (0=native)" } },
+        "height": { "description": { "zh": "高度（0=原始）", "en": "Height (0=native)" } }
+      },
+      "since": "1.1.0"
+    },
+
+    "pivot.add": {
+      "usage": "xl pivot.add --src=<source_range> --dest=<dest_cell> [--name=<pt_name>]",
+      "description": { "zh": "新建透视表", "en": "Create pivot table" },
+      "params": {
+        "src":  { "required": true, "description": { "zh": "源数据范围", "en": "Source range" } },
+        "dest": { "required": true, "description": { "zh": "目标位置", "en": "Destination" } },
+        "name": { "description": { "zh": "透视表名称", "en": "Pivot table name" } }
+      },
+      "since": "1.1.0"
+    },
+    "pivot.refresh": {
+      "usage": "xl pivot.refresh [<pt_name>]",
+      "description": { "zh": "刷新透视表（无名则刷新全部）", "en": "Refresh pivot table (omit name to refresh all)" },
+      "positional": "name",
+      "since": "1.1.0"
+    },
+    "pivot.field": {
+      "usage": "xl pivot.field --pt=<name> --field=<colName> --area=row|column|page|data [--func=sum|count|avg|min|max]",
+      "description": { "zh": "设置透视字段方位/汇总函数", "en": "Set pivot field area/function" },
+      "params": {
+        "pt":    { "required": true, "description": { "zh": "透视表名称", "en": "Pivot table name" } },
+        "field": { "required": true, "description": { "zh": "字段（列）名", "en": "Field (column) name" } },
+        "area":  { "required": true, "description": { "zh": "字段区域", "en": "Field area" }, "values": ["row", "column", "page", "data"] },
+        "func":  { "description": { "zh": "汇总函数（仅 data 有效）", "en": "Aggregate function (data area only)" }, "values": ["sum", "count", "avg", "min", "max"] }
+      },
+      "since": "1.1.0"
+    },
+    "cf": {
+      "usage": "xl cf <range> --kind=cellvalue|colorscale|databar|iconset [--op=...] [--v1/--v2] [--bg/--color] [--low/--mid/--high] [--style]",
+      "description": { "zh": "添加条件格式", "en": "Add conditional format" },
+      "positional": "range",
+      "params": {
+        "kind":  { "required": true, "description": { "zh": "类型", "en": "Kind" }, "values": ["cellvalue", "colorscale", "databar", "iconset"] },
+        "op":    { "description": { "zh": "比较运算（cellvalue）", "en": "Operator (cellvalue)" }, "values": ["greater", "less", "equal", "between"] },
+        "v1":    { "description": { "zh": "阈值 1", "en": "Value 1" } },
+        "v2":    { "description": { "zh": "阈值 2 (between)", "en": "Value 2 (between)" } },
+        "bg":    { "description": { "zh": "命中背景色", "en": "Background color" } },
+        "color": { "description": { "zh": "命中字体色", "en": "Font color" } },
+        "low":   { "description": { "zh": "色阶低值色", "en": "Color scale low" } },
+        "mid":   { "description": { "zh": "色阶中值色", "en": "Color scale mid" } },
+        "high":  { "description": { "zh": "色阶高值色", "en": "Color scale high" } },
+        "style": { "description": { "zh": "图标集样式", "en": "Icon set style" } }
+      },
+      "since": "1.1.0"
+    },
+    "validation": {
+      "usage": "xl validation <range> --kind=list|number|decimal|date|text [--values=v1,v2,...] [--op=...] [--v1/--v2] [--prompt] [--errorTitle] [--errorMessage]",
+      "description": { "zh": "添加数据验证（下拉/范围/长度…）", "en": "Add data validation (dropdown/range/length…)" },
+      "positional": "range",
+      "params": {
+        "kind":         { "required": true, "description": { "zh": "类型", "en": "Kind" }, "values": ["list", "number", "decimal", "date", "text"] },
+        "values":       { "description": { "zh": "list 值（逗号分隔）", "en": "List values (comma-separated)" } },
+        "op":           { "description": { "zh": "比较运算", "en": "Operator" } },
+        "v1":           { "description": { "zh": "值 1", "en": "Value 1" } },
+        "v2":           { "description": { "zh": "值 2", "en": "Value 2" } },
+        "prompt":       { "description": { "zh": "输入提示", "en": "Input prompt" } },
+        "errorTitle":   { "description": { "zh": "错误标题", "en": "Error title" } },
+        "errorMessage": { "description": { "zh": "错误消息", "en": "Error message" } }
+      },
+      "since": "1.1.0"
+    },
+    "comment": {
+      "usage": { "zh": "xl comment <单元格> --text=<内容>", "en": "xl comment <cell> --text=<text>" },
+      "description": { "zh": "添加单元格批注", "en": "Add cell comment" },
+      "positional": "cell",
+      "params": { "text": { "required": true, "description": { "zh": "批注内容", "en": "Comment text" } } },
+      "since": "1.1.0"
+    },
+    "comment.delete": {
+      "usage": { "zh": "xl comment.delete <单元格>", "en": "xl comment.delete <cell>" },
+      "description": { "zh": "删除批注", "en": "Delete comment" },
+      "positional": "cell",
+      "since": "1.1.0"
+    },
+    "link": {
+      "usage": "xl link <cell> --url=<url> [--text=<display>] [--tip=<tooltip>]",
+      "description": { "zh": "添加超链接", "en": "Add hyperlink" },
+      "positional": "cell",
+      "params": {
+        "url":  { "required": true, "description": { "zh": "URL", "en": "URL" } },
+        "text": { "description": { "zh": "显示文本（默认同 URL）", "en": "Display text (defaults to URL)" } },
+        "tip":  { "description": { "zh": "悬浮提示", "en": "Tooltip" } }
+      },
+      "since": "1.1.0"
+    },
+    "name": {
+      "usage": "xl name <name> [--range=<range>]  (省略 range 删除)",
+      "description": { "zh": "命名范围（省略 --range 则删除该名称）", "en": "Named range (omit --range to delete)" },
+      "positional": "name",
+      "params": { "range": { "description": { "zh": "范围引用 (如 Sheet1!$A$1:$B$10 或 A1:B10)", "en": "Range reference" } } },
+      "since": "1.1.0"
+    },
+
+    "sheet.copy": {
+      "usage": "xl sheet.copy <name> [--to=<sheet>] [--position=before|after] [--newName=<str>]",
+      "description": { "zh": "复制工作表", "en": "Copy worksheet" },
+      "positional": "name",
+      "params": {
+        "to":       { "description": { "zh": "目标锚定表（默认末尾）", "en": "Anchor sheet (default: end)" } },
+        "position": { "description": { "zh": "相对位置", "en": "Position" }, "values": ["before", "after"] },
+        "newName":  { "description": { "zh": "新工作表名称", "en": "New sheet name" } }
+      },
+      "since": "1.1.0"
+    },
+    "sheet.move": {
+      "usage": "xl sheet.move <name> --to=<sheet> [--position=before|after]",
+      "description": { "zh": "移动工作表", "en": "Move worksheet" },
+      "positional": "name",
+      "params": {
+        "to":       { "required": true, "description": { "zh": "目标锚定表", "en": "Anchor sheet" } },
+        "position": { "description": { "zh": "相对位置", "en": "Position" }, "values": ["before", "after"] }
+      },
+      "since": "1.1.0"
+    },
+    "sheet.hide": {
+      "usage": "xl sheet.hide <name> [--state=hidden|very-hidden|visible]",
+      "description": { "zh": "隐藏 / 显示工作表", "en": "Hide / show worksheet" },
+      "positional": "name",
+      "params": { "state": { "description": { "zh": "状态", "en": "State" }, "values": ["hidden", "very-hidden", "visible"] } },
+      "since": "1.1.0"
+    },
+    "sheet.protect": {
+      "usage": "xl sheet.protect [--name=<sheet>] [--password=<str>]",
+      "description": { "zh": "保护工作表", "en": "Protect worksheet" },
+      "params": {
+        "name":     { "description": { "zh": "工作表名称（默认当前）", "en": "Sheet name (default active)" } },
+        "password": { "description": { "zh": "密码", "en": "Password" } }
+      },
+      "since": "1.1.0"
+    },
+    "sheet.unprotect": {
+      "usage": "xl sheet.unprotect [--name=<sheet>] [--password=<str>]",
+      "description": { "zh": "取消保护", "en": "Unprotect worksheet" },
+      "params": {
+        "name":     { "description": { "zh": "工作表名称", "en": "Sheet name" } },
+        "password": { "description": { "zh": "密码", "en": "Password" } }
+      },
+      "since": "1.1.0"
+    },
+    "sheet.color": {
+      "usage": "xl sheet.color [--name=<sheet>] --color=<color|none>",
+      "description": { "zh": "设置工作表标签颜色（none 清除）", "en": "Set tab color (none to clear)" },
+      "params": {
+        "name":  { "description": { "zh": "工作表名称", "en": "Sheet name" } },
+        "color": { "required": true, "description": { "zh": "颜色 | none", "en": "Color | none" } }
+      },
+      "since": "1.1.0"
+    },
+
+    "height": {
+      "usage": { "zh": "xl height <行号> --size=<高度> (--height 同义)", "en": "xl height <row> --size=<height> (--height alias)" },
+      "description": { "zh": "设置行高", "en": "Set row height" },
+      "positional": "row",
+      "params": {
+        "size":   { "description": { "zh": "行高数值", "en": "Row height" } },
+        "height": { "description": { "zh": "--size 别名", "en": "Alias of --size" } }
+      },
+      "since": "1.1.0"
+    },
+    "row.hide": {
+      "usage": "xl row.hide <row> [--count=1] [--show=true|false]",
+      "description": { "zh": "隐藏 / 显示行（--show=true 取消隐藏）", "en": "Hide / show rows (--show=true to unhide)" },
+      "positional": "row",
+      "params": {
+        "count": { "description": { "zh": "数量", "en": "Count" } },
+        "show":  { "description": { "zh": "显示", "en": "Show" }, "values": ["true", "false"] }
+      },
+      "since": "1.1.0"
+    },
+    "col.hide": {
+      "usage": "xl col.hide <column> [--count=1] [--show=true|false]",
+      "description": { "zh": "隐藏 / 显示列", "en": "Hide / show columns" },
+      "positional": "column",
+      "params": {
+        "count": { "description": { "zh": "数量", "en": "Count" } },
+        "show":  { "description": { "zh": "显示", "en": "Show" }, "values": ["true", "false"] }
+      },
+      "since": "1.1.0"
+    },
+    "insert": {
+      "usage": "xl insert <range> [--shift=down|right]",
+      "description": { "zh": "插入单元格（默认下移）", "en": "Insert cells (default shift down)" },
+      "positional": "range",
+      "params": { "shift": { "description": { "zh": "移动方向", "en": "Shift direction" }, "values": ["down", "right"] } },
+      "since": "1.1.0"
+    },
+    "delete": {
+      "usage": "xl delete <range> [--shift=up|left]",
+      "description": { "zh": "删除单元格（默认上移）", "en": "Delete cells (default shift up)" },
+      "positional": "range",
+      "params": { "shift": { "description": { "zh": "移动方向", "en": "Shift direction" }, "values": ["up", "left"] } },
+      "since": "1.1.0"
+    },
+    "autofill": {
+      "usage": "xl autofill --src=<range> --dest=<range> [--type=default|copy|series|formats|values]",
+      "description": { "zh": "自动填充（series 生成序列）", "en": "Auto-fill (series generates a sequence)" },
+      "params": {
+        "src":  { "required": true, "description": { "zh": "源范围", "en": "Source range" } },
+        "dest": { "required": true, "description": { "zh": "目标范围（包含源）", "en": "Destination range (includes source)" } },
+        "type": { "description": { "zh": "填充类型", "en": "Fill type" }, "values": ["default", "copy", "series", "formats", "values"] }
+      },
+      "since": "1.1.0"
+    },
+
+    "zoom": {
+      "usage": "xl zoom <percent>",
+      "description": { "zh": "视图缩放 (10..400)", "en": "View zoom (10..400)" },
+      "positional": "percent",
+      "since": "1.1.0"
+    },
+    "view": {
+      "usage": "xl view normal|page-break|page-layout",
+      "description": { "zh": "切换视图模式", "en": "Switch view mode" },
+      "positional": "kind",
+      "since": "1.1.0"
+    },
+    "gridlines": {
+      "usage": "xl gridlines on|off",
+      "description": { "zh": "显示/隐藏网格线", "en": "Show/hide gridlines" },
+      "positional": "state",
+      "since": "1.1.0"
+    },
+    "headings": {
+      "usage": "xl headings on|off",
+      "description": { "zh": "显示/隐藏行列标题", "en": "Show/hide row/column headings" },
+      "positional": "state",
+      "since": "1.1.0"
+    },
+    "group": {
+      "usage": "xl group <range> [--axis=row|col]",
+      "description": { "zh": "分组（折叠）行 / 列", "en": "Group (collapsible) rows / columns" },
+      "positional": "range",
+      "params": { "axis": { "description": { "zh": "轴向", "en": "Axis" }, "values": ["row", "col"] } },
+      "since": "1.1.0"
+    },
+    "ungroup": {
+      "usage": "xl ungroup <range> [--axis=row|col]",
+      "description": { "zh": "取消分组", "en": "Ungroup" },
+      "positional": "range",
+      "params": { "axis": { "description": { "zh": "轴向", "en": "Axis" }, "values": ["row", "col"] } },
+      "since": "1.1.0"
+    },
+    "wrap": {
+      "usage": "xl wrap <range> [--state=on|off]",
+      "description": { "zh": "自动换行 on/off", "en": "Wrap text on/off" },
+      "positional": "range",
+      "params": { "state": { "description": { "zh": "状态", "en": "State" }, "values": ["on", "off"] } },
+      "since": "1.1.0"
+    },
+    "rotate": {
+      "usage": "xl rotate <range> --degrees=<-90..90>",
+      "description": { "zh": "文本旋转角度", "en": "Text rotation degrees" },
+      "positional": "range",
+      "params": { "degrees": { "required": true, "description": { "zh": "角度 -90..90", "en": "Degrees -90..90" } } },
+      "since": "1.1.0"
+    },
+    "indent": {
+      "usage": "xl indent <range> --level=<0..15>",
+      "description": { "zh": "缩进级别", "en": "Indent level" },
+      "positional": "range",
+      "params": { "level": { "required": true, "description": { "zh": "缩进 0..15", "en": "Level 0..15" } } },
+      "since": "1.1.0"
+    },
+
+    "recalc": {
+      "usage": "xl recalc [--scope=workbook|sheet|app]",
+      "description": { "zh": "强制重算", "en": "Force recalculate" },
+      "params": { "scope": { "description": { "zh": "范围", "en": "Scope" }, "values": ["workbook", "sheet", "app"] } },
+      "since": "1.1.0"
+    },
+    "protect.book": {
+      "usage": "xl protect.book [--password=<str>] [--structure=true|false] [--windows=true|false]",
+      "description": { "zh": "保护工作簿（结构 / 窗口）", "en": "Protect workbook (structure / windows)" },
+      "params": {
+        "password":  { "description": { "zh": "密码", "en": "Password" } },
+        "structure": { "description": { "zh": "保护结构", "en": "Protect structure" }, "values": ["true", "false"] },
+        "windows":   { "description": { "zh": "保护窗口", "en": "Protect windows" }, "values": ["true", "false"] }
+      },
+      "since": "1.1.0"
+    },
+    "props": {
+      "usage": "xl props [--title=<>] [--author=<>] [--subject=<>] [--keywords=<>] [--comments=<>]",
+      "description": { "zh": "读 / 写文档属性（无参数则读出全部）", "en": "Read / write doc properties (no flags: read all)" },
+      "params": {
+        "title":    { "description": { "zh": "标题", "en": "Title" } },
+        "author":   { "description": { "zh": "作者", "en": "Author" } },
+        "subject":  { "description": { "zh": "主题", "en": "Subject" } },
+        "keywords": { "description": { "zh": "关键字", "en": "Keywords" } },
+        "comments": { "description": { "zh": "备注", "en": "Comments" } }
+      },
+      "since": "1.1.0"
+    },
+    "screen": {
+      "usage": "xl screen on|off",
+      "description": { "zh": "屏幕刷新开关（off 加速批量操作）", "en": "Screen updating on/off (off speeds up batch ops)" },
+      "positional": "state",
+      "since": "1.1.0"
+    },
+    "alerts": {
+      "usage": "xl alerts on|off",
+      "description": { "zh": "弹窗提示开关（off 静默）", "en": "Alerts on/off (off silences dialogs)" },
+      "positional": "state",
+      "since": "1.1.0"
+    },
+    "undo": {
+      "usage": "xl undo",
+      "description": { "zh": "撤销最近一步操作", "en": "Undo last operation" },
+      "params": {},
+      "since": "1.1.0"
+    },
+    "shape.add": {
+      "usage": "xl shape.add --kind=rectangle|oval|line|arrow|text [--left] [--top] [--width] [--height] [--text=str]",
+      "description": { "zh": "插入形状", "en": "Insert shape" },
+      "params": {
+        "kind":   { "required": true, "description": { "zh": "形状类型", "en": "Shape kind" }, "values": ["rectangle", "oval", "line", "arrow", "text"] },
+        "left":   { "description": { "zh": "左偏移", "en": "Left position" } },
+        "top":    { "description": { "zh": "顶偏移", "en": "Top position" } },
+        "width":  { "description": { "zh": "宽度", "en": "Width" } },
+        "height": { "description": { "zh": "高度", "en": "Height" } },
+        "text":   { "description": { "zh": "形状内文本", "en": "Shape text" } }
+      },
+      "since": "1.1.0"
     }
   },
   "compactDocs": {
-    "zh": "xl — Excel: open/new [<path>] [--force]/save/close/books | sheets/sheet/sheet.add/sheet.rename/sheet.delete | get <cell> [--format] | range <range>(TSV) | used | find <kw> [--in] | set <cell> --value [--type] / --formula | fill <range> --values(TSV) | clear | fmt [--bold --italic --size --color --bg --align --numfmt --border] | width <col> --size | row.add/row.delete/col.add/col.delete [--count] | merge/unmerge | export --format=pdf|csv --path  Range: A1 | A1:C10 | Sheet@A1",
-    "en": "xl — Excel: open/new [<path>] [--force]/save/close/books | sheets/sheet/sheet.add/sheet.rename/sheet.delete | get <cell> [--format] | range <range>(TSV) | used | find <kw> [--in] | set <cell> --value [--type] / --formula | fill <range> --values(TSV) | clear | fmt [--bold --italic --size --color --bg --align --numfmt --border] | width <col> --size | row.add/row.delete/col.add/col.delete [--count] | merge/unmerge | export --format=pdf|csv --path  Range: A1 | A1:C10 | Sheet@A1"
+    "zh": "xl — Excel: open/new/save/close/books | sheets/sheet[.add/.rename/.delete/.copy/.move/.hide/.protect/.unprotect/.color] | get/range/used/find | set/fill/clear | fmt/wrap/rotate/indent | width/height/autofit | row.add/.delete/.hide  col.add/.delete/.hide  insert/delete/autofill | merge/unmerge | sort/filter[.clear]/freeze[.clear] | copy/cut/paste[--what] | comment[.delete]/link/name | cf/validation | chart.add/.delete/.export  image.add  shape.add | pivot.add/.refresh/.field | page/printarea/print | view/zoom/gridlines/headings/group/ungroup | recalc/protect.book/props/screen/alerts/undo | export --format=pdf|csv  Range: A1|A1:C10|Sheet@A1",
+    "en": "xl — Excel: open/new/save/close/books | sheets/sheet[.add/.rename/.delete/.copy/.move/.hide/.protect/.unprotect/.color] | get/range/used/find | set/fill/clear | fmt/wrap/rotate/indent | width/height/autofit | row.add/.delete/.hide  col.add/.delete/.hide  insert/delete/autofill | merge/unmerge | sort/filter[.clear]/freeze[.clear] | copy/cut/paste[--what] | comment[.delete]/link/name | cf/validation | chart.add/.delete/.export  image.add  shape.add | pivot.add/.refresh/.field | page/printarea/print | view/zoom/gridlines/headings/group/ungroup | recalc/protect.book/props/screen/alerts/undo | export --format=pdf|csv  Range: A1|A1:C10|Sheet@A1"
   },
   "batchable": true
 }
