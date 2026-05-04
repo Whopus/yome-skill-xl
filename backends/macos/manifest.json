@@ -197,6 +197,468 @@
         { "name": "path",   "from": "--path",   "required": true }
       ],
       "uses": ["fs:write", "applescript"]
+    },
+
+    "sort": {
+      "script": "sort.applescript",
+      "args": [
+        { "name": "range",  "from": "positional|--range", "required": true },
+        { "name": "by",     "from": "--by",               "required": true },
+        { "name": "order",  "from": "--order",            "default": "" },
+        { "name": "header", "from": "--header",           "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "filter": {
+      "script": "filter.applescript",
+      "args": [
+        { "name": "range",     "from": "positional|--range", "required": true },
+        { "name": "field",     "from": "--field",            "default": "" },
+        { "name": "criteria1", "from": "--criteria1",        "default": "" },
+        { "name": "criteria2", "from": "--criteria2",        "default": "" },
+        { "name": "op",        "from": "--op",               "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "filter.clear": {
+      "script": "filter.clear.applescript",
+      "uses": ["applescript"]
+    },
+    "freeze": {
+      "script": "freeze.applescript",
+      "args": [
+        { "name": "row", "from": "--row", "default": "0" },
+        { "name": "col", "from": "--col", "default": "0" }
+      ],
+      "uses": ["applescript"]
+    },
+    "freeze.clear": {
+      "script": "freeze.clear.applescript",
+      "uses": ["applescript"]
+    },
+    "autofit": {
+      "script": "autofit.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true },
+        { "name": "axis",  "from": "--axis",             "default": "col" }
+      ],
+      "uses": ["applescript"]
+    },
+    "copy": {
+      "script": "copy.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "cut": {
+      "script": "cut.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "paste": {
+      "script": "paste.applescript",
+      "args": [
+        { "name": "dest",      "from": "positional|--dest", "required": true },
+        { "name": "what",      "from": "--what",            "default": "all" },
+        { "name": "transpose", "from": "--transpose",       "default": "false" }
+      ],
+      "uses": ["applescript"]
+    },
+    "page": {
+      "script": "page.applescript",
+      "args": [
+        { "name": "orientation", "from": "--orientation", "default": "" },
+        { "name": "paper",       "from": "--paper",       "default": "" },
+        { "name": "fit",         "from": "--fit",         "default": "" },
+        { "name": "header",      "from": "--header",      "default": "" },
+        { "name": "footer",      "from": "--footer",      "default": "" },
+        { "name": "margin",      "from": "--margin",      "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "printarea": {
+      "script": "printarea.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "print": {
+      "script": "print.applescript",
+      "args": [
+        { "name": "copies", "from": "--copies", "default": "1" },
+        { "name": "scope",  "from": "--scope",  "default": "sheet" }
+      ],
+      "uses": ["applescript"]
+    },
+
+    "chart.add": {
+      "script": "chart.add.applescript",
+      "args": [
+        { "name": "range",  "from": "--range",   "required": true },
+        { "name": "type",   "from": "--type",    "default": "column" },
+        { "name": "title",  "from": "--title",   "default": "" },
+        { "name": "left",   "from": "--left",    "default": "0" },
+        { "name": "top",    "from": "--top",     "default": "0" },
+        { "name": "width",  "from": "--width",   "default": "0" },
+        { "name": "height", "from": "--height",  "default": "0" },
+        { "name": "dest",   "from": "--dest",    "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "chart.delete": {
+      "script": "chart.delete.applescript",
+      "args": [
+        { "name": "name", "from": "positional|--name", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "chart.export": {
+      "script": "chart.export.applescript",
+      "args": [
+        { "name": "name",   "from": "positional|--name", "required": true },
+        { "name": "path",   "from": "--path",            "required": true },
+        { "name": "format", "from": "--format",          "default": "png" }
+      ],
+      "uses": ["fs:write", "applescript"]
+    },
+    "image.add": {
+      "script": "image.add.applescript",
+      "args": [
+        { "name": "path",   "from": "--path",   "required": true },
+        { "name": "cell",   "from": "--cell",   "default": "" },
+        { "name": "left",   "from": "--left",   "default": "0" },
+        { "name": "top",    "from": "--top",    "default": "0" },
+        { "name": "width",  "from": "--width",  "default": "0" },
+        { "name": "height", "from": "--height", "default": "0" }
+      ],
+      "uses": ["fs:read", "applescript"]
+    },
+
+    "pivot.add": {
+      "script": "pivot.add.applescript",
+      "args": [
+        { "name": "src",  "from": "--src",  "required": true },
+        { "name": "dest", "from": "--dest", "required": true },
+        { "name": "name", "from": "--name", "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "pivot.refresh": {
+      "script": "pivot.refresh.applescript",
+      "args": [
+        { "name": "name", "from": "positional|--name", "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "pivot.field": {
+      "script": "pivot.field.applescript",
+      "args": [
+        { "name": "pt",    "from": "--pt",    "required": true },
+        { "name": "field", "from": "--field", "required": true },
+        { "name": "area",  "from": "--area",  "required": true },
+        { "name": "func",  "from": "--func",  "default": "sum" }
+      ],
+      "uses": ["applescript"]
+    },
+    "cf": {
+      "script": "cf.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true },
+        { "name": "kind",  "from": "--kind",  "required": true },
+        { "name": "op",    "from": "--op",    "default": "" },
+        { "name": "v1",    "from": "--v1",    "default": "" },
+        { "name": "v2",    "from": "--v2",    "default": "" },
+        { "name": "bg",    "from": "--bg",    "default": "" },
+        { "name": "color", "from": "--color", "default": "" },
+        { "name": "low",   "from": "--low",   "default": "" },
+        { "name": "mid",   "from": "--mid",   "default": "" },
+        { "name": "high",  "from": "--high",  "default": "" },
+        { "name": "style", "from": "--style", "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "validation": {
+      "script": "validation.applescript",
+      "args": [
+        { "name": "range",        "from": "positional|--range", "required": true },
+        { "name": "kind",         "from": "--kind",         "required": true },
+        { "name": "values",       "from": "--values",       "default": "" },
+        { "name": "op",           "from": "--op",           "default": "" },
+        { "name": "v1",           "from": "--v1",           "default": "" },
+        { "name": "v2",           "from": "--v2",           "default": "" },
+        { "name": "prompt",       "from": "--prompt",       "default": "" },
+        { "name": "errorTitle",   "from": "--errorTitle",   "default": "" },
+        { "name": "errorMessage", "from": "--errorMessage", "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "comment": {
+      "script": "comment.applescript",
+      "args": [
+        { "name": "cell", "from": "positional|--cell", "required": true },
+        { "name": "text", "from": "--text",            "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "comment.delete": {
+      "script": "comment.delete.applescript",
+      "args": [
+        { "name": "cell", "from": "positional|--cell", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "link": {
+      "script": "link.applescript",
+      "args": [
+        { "name": "cell", "from": "positional|--cell", "required": true },
+        { "name": "url",  "from": "--url",             "required": true },
+        { "name": "text", "from": "--text",            "default": "" },
+        { "name": "tip",  "from": "--tip",             "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "name": {
+      "script": "name.applescript",
+      "args": [
+        { "name": "name",  "from": "positional|--name", "required": true },
+        { "name": "range", "from": "--range",           "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+
+    "sheet.copy": {
+      "script": "sheet.copy.applescript",
+      "args": [
+        { "name": "name",     "from": "positional|--name", "required": true },
+        { "name": "to",       "from": "--to",              "default": "" },
+        { "name": "position", "from": "--position",        "default": "after" },
+        { "name": "newName",  "from": "--newName",         "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "sheet.move": {
+      "script": "sheet.move.applescript",
+      "args": [
+        { "name": "name",     "from": "positional|--name", "required": true },
+        { "name": "to",       "from": "--to",              "required": true },
+        { "name": "position", "from": "--position",        "default": "after" }
+      ],
+      "uses": ["applescript"]
+    },
+    "sheet.hide": {
+      "script": "sheet.hide.applescript",
+      "args": [
+        { "name": "name",  "from": "positional|--name", "required": true },
+        { "name": "state", "from": "--state",           "default": "hidden" }
+      ],
+      "uses": ["applescript"]
+    },
+    "sheet.protect": {
+      "script": "sheet.protect.applescript",
+      "args": [
+        { "name": "name",     "from": "--name",     "default": "" },
+        { "name": "password", "from": "--password", "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "sheet.unprotect": {
+      "script": "sheet.unprotect.applescript",
+      "args": [
+        { "name": "name",     "from": "--name",     "default": "" },
+        { "name": "password", "from": "--password", "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "sheet.color": {
+      "script": "sheet.color.applescript",
+      "args": [
+        { "name": "name",  "from": "--name",  "default": "" },
+        { "name": "color", "from": "--color", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+
+    "height": {
+      "script": "height.applescript",
+      "args": [
+        { "name": "row",  "from": "positional|--row", "required": true },
+        { "name": "size", "from": "--size|--height",  "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "row.hide": {
+      "script": "row.hide.applescript",
+      "args": [
+        { "name": "row",   "from": "positional|--row", "required": true },
+        { "name": "count", "from": "--count",          "default": "1" },
+        { "name": "show",  "from": "--show",           "default": "false" }
+      ],
+      "uses": ["applescript"]
+    },
+    "col.hide": {
+      "script": "col.hide.applescript",
+      "args": [
+        { "name": "column", "from": "positional|--column", "required": true },
+        { "name": "count",  "from": "--count",             "default": "1" },
+        { "name": "show",   "from": "--show",              "default": "false" }
+      ],
+      "uses": ["applescript"]
+    },
+    "insert": {
+      "script": "insert.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true },
+        { "name": "shift", "from": "--shift",            "default": "down" }
+      ],
+      "uses": ["applescript"]
+    },
+    "delete": {
+      "script": "delete.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true },
+        { "name": "shift", "from": "--shift",            "default": "up" }
+      ],
+      "uses": ["applescript"]
+    },
+    "autofill": {
+      "script": "autofill.applescript",
+      "args": [
+        { "name": "src",  "from": "--src",  "required": true },
+        { "name": "dest", "from": "--dest", "required": true },
+        { "name": "type", "from": "--type", "default": "default" }
+      ],
+      "uses": ["applescript"]
+    },
+
+    "zoom": {
+      "script": "zoom.applescript",
+      "args": [
+        { "name": "percent", "from": "positional|--percent", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "view": {
+      "script": "view.applescript",
+      "args": [
+        { "name": "kind", "from": "positional|--kind", "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "gridlines": {
+      "script": "gridlines.applescript",
+      "args": [
+        { "name": "state", "from": "positional|--state", "default": "on" }
+      ],
+      "uses": ["applescript"]
+    },
+    "headings": {
+      "script": "headings.applescript",
+      "args": [
+        { "name": "state", "from": "positional|--state", "default": "on" }
+      ],
+      "uses": ["applescript"]
+    },
+    "group": {
+      "script": "group.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true },
+        { "name": "axis",  "from": "--axis",             "default": "row" }
+      ],
+      "uses": ["applescript"]
+    },
+    "ungroup": {
+      "script": "ungroup.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true },
+        { "name": "axis",  "from": "--axis",             "default": "row" }
+      ],
+      "uses": ["applescript"]
+    },
+    "wrap": {
+      "script": "wrap.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true },
+        { "name": "state", "from": "--state",            "default": "on" }
+      ],
+      "uses": ["applescript"]
+    },
+    "rotate": {
+      "script": "rotate.applescript",
+      "args": [
+        { "name": "range",   "from": "positional|--range", "required": true },
+        { "name": "degrees", "from": "--degrees",          "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+    "indent": {
+      "script": "indent.applescript",
+      "args": [
+        { "name": "range", "from": "positional|--range", "required": true },
+        { "name": "level", "from": "--level",            "required": true }
+      ],
+      "uses": ["applescript"]
+    },
+
+    "recalc": {
+      "script": "recalc.applescript",
+      "args": [
+        { "name": "scope", "from": "--scope", "default": "workbook" }
+      ],
+      "uses": ["applescript"]
+    },
+    "protect.book": {
+      "script": "protect.book.applescript",
+      "args": [
+        { "name": "password",  "from": "--password",  "default": "" },
+        { "name": "structure", "from": "--structure", "default": "true" },
+        { "name": "windows",   "from": "--windows",   "default": "false" }
+      ],
+      "uses": ["applescript"]
+    },
+    "props": {
+      "script": "props.applescript",
+      "args": [
+        { "name": "title",    "from": "--title",    "default": "" },
+        { "name": "author",   "from": "--author",   "default": "" },
+        { "name": "subject",  "from": "--subject",  "default": "" },
+        { "name": "keywords", "from": "--keywords", "default": "" },
+        { "name": "comments", "from": "--comments", "default": "" }
+      ],
+      "uses": ["applescript"]
+    },
+    "screen": {
+      "script": "screen.applescript",
+      "args": [
+        { "name": "state", "from": "positional|--state", "default": "on" }
+      ],
+      "uses": ["applescript"]
+    },
+    "alerts": {
+      "script": "alerts.applescript",
+      "args": [
+        { "name": "state", "from": "positional|--state", "default": "on" }
+      ],
+      "uses": ["applescript"]
+    },
+    "undo": {
+      "script": "undo.applescript",
+      "uses": ["applescript"]
+    },
+    "shape.add": {
+      "script": "shape.add.applescript",
+      "args": [
+        { "name": "kind",   "from": "--kind",   "required": true },
+        { "name": "left",   "from": "--left",   "default": "0" },
+        { "name": "top",    "from": "--top",    "default": "0" },
+        { "name": "width",  "from": "--width",  "default": "0" },
+        { "name": "height", "from": "--height", "default": "0" },
+        { "name": "text",   "from": "--text",   "default": "" }
+      ],
+      "uses": ["applescript"]
     }
   }
 }
