@@ -33,6 +33,7 @@ BACKEND_ID = "python-openpyxl"
 STATE_ROOT = Path(os.environ.get("YOME_STATE_HOME") or (Path.home() / ".yome" / "state"))
 STATE_FILE = STATE_ROOT / "@yome" / "xl" / "linux-session.json"
 SUPPORTED_ACTIONS = [
+    "info",
     "open",
     "new",
     "save",
@@ -136,6 +137,8 @@ def dispatch(req: dict[str, Any]) -> dict[str, Any]:
     cwd = str(req.get("workingDirectory") or os.environ.get("YOME_WORKING_DIRECTORY") or os.getcwd())
     state = load_state()
 
+    if action == "info":
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_info(wb, path, fx, state))
     if action == "open":
         return xl_open(positionals, flags, cwd, state)
     if action == "new":
@@ -147,47 +150,47 @@ def dispatch(req: dict[str, Any]) -> dict[str, Any]:
     if action == "books":
         return xl_books(state)
     if action == "sheets":
-        return with_workbook(state, flags, cwd, xl_sheets)
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_sheets(wb, path))
     if action == "sheet":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_sheet(wb, path, positionals, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_sheet(wb, path, pos, state))
     if action == "sheet.add":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_sheet_add(wb, path, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_sheet_add(wb, path, fx, state))
     if action == "sheet.rename":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_sheet_rename(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_sheet_rename(wb, path, pos, fx, state))
     if action == "sheet.delete":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_sheet_delete(wb, path, positionals, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_sheet_delete(wb, path, pos, state))
     if action == "used":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_used(wb, path, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_used(wb, path, fx, state))
     if action == "get":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_get(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_get(wb, path, pos, fx, state))
     if action == "range":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_range(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_range(wb, path, pos, fx, state))
     if action == "find":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_find(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_find(wb, path, pos, fx, state))
     if action == "set":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_set(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_set(wb, path, pos, fx, state))
     if action == "fill":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_fill(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_fill(wb, path, pos, fx, state))
     if action == "clear":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_clear(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_clear(wb, path, pos, fx, state))
     if action == "fmt":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_fmt(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_fmt(wb, path, pos, fx, state))
     if action == "width":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_width(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_width(wb, path, pos, fx, state))
     if action == "row.add":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_row_add(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_row_add(wb, path, pos, fx, state))
     if action == "row.delete":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_row_delete(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_row_delete(wb, path, pos, fx, state))
     if action == "col.add":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_col_add(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_col_add(wb, path, pos, fx, state))
     if action == "col.delete":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_col_delete(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_col_delete(wb, path, pos, fx, state))
     if action == "merge":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_merge(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_merge(wb, path, pos, fx, state))
     if action == "unmerge":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_unmerge(wb, path, positionals, flags, state))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_unmerge(wb, path, pos, fx, state))
     if action == "export":
-        return with_workbook(state, flags, cwd, lambda wb, path: xl_export(wb, path, flags, state, cwd))
+        return with_workbook(state, flags, cwd, positionals, lambda wb, path, pos, fx: xl_export(wb, path, fx, state, cwd))
 
     return fail(f"xl {action}: not supported by {BACKEND_ID}. Supported: {', '.join(SUPPORTED_ACTIONS)}", 127)
 
@@ -265,6 +268,24 @@ def xl_books(state: dict[str, Any]) -> dict[str, Any]:
         except Exception as exc:
             lines.append(f"{path}\tERROR: {exc}\t")
     return ok("\n".join(lines))
+
+
+def xl_info(wb: Any, path: str, flags: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
+    active = active_sheet_name(state, path) or wb.active.title
+    sheets: list[dict[str, Any]] = []
+    for ws in wb.worksheets:
+        bounds = actual_used_bounds(ws)
+        if bounds:
+            min_row, min_col, max_row, max_col = bounds
+            used = f"{get_column_letter(min_col)}{min_row}:{get_column_letter(max_col)}{max_row}"
+            rows = max_row - min_row + 1
+            cols = max_col - min_col + 1
+        else:
+            used = "A1"
+            rows = 0
+            cols = 0
+        sheets.append({"name": ws.title, "rows": rows, "cols": cols, "used": used, "active": ws.title == active})
+    return ok_json({"ok": True, "path": path, "sheets": sheets, "active": active})
 
 
 def xl_sheets(wb: Any, path: str) -> dict[str, Any]:
@@ -350,7 +371,7 @@ def xl_used(wb: Any, path: str, flags: dict[str, Any], state: dict[str, Any]) ->
 
 
 def xl_get(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
-    raw = first(positionals)
+    raw = first(positionals) or str(flags.get("cell") or "")
     if not raw:
         return fail("xl get: missing <cell>", 2)
     sheet_name, address = parse_ref(raw)
@@ -367,7 +388,7 @@ def xl_get(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], st
 
 
 def xl_range(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
-    raw = first(positionals)
+    raw = first(positionals) or str(flags.get("range") or "")
     if not raw:
         return fail("xl range: missing <range>", 2)
     sheet_name, address = parse_ref(raw)
@@ -403,7 +424,7 @@ def xl_find(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], s
 
 
 def xl_set(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
-    raw = first(positionals)
+    raw = first(positionals) or str(flags.get("cell") or "")
     if not raw:
         return fail("xl set: missing <cell>", 2)
     sheet_name, address = parse_ref(raw)
@@ -420,7 +441,7 @@ def xl_set(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], st
 
 
 def xl_fill(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
-    raw = first(positionals)
+    raw = first(positionals) or str(flags.get("range") or "")
     if not raw:
         return fail("xl fill: missing <range>", 2)
     if flags.get("values") is None:
@@ -439,7 +460,7 @@ def xl_fill(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], s
 
 
 def xl_clear(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
-    raw = first(positionals)
+    raw = first(positionals) or str(flags.get("range") or "")
     if not raw:
         return fail("xl clear: missing <range>", 2)
     sheet_name, address = parse_ref(raw)
@@ -456,7 +477,7 @@ def xl_clear(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], 
 
 
 def xl_fmt(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
-    raw = first(positionals)
+    raw = first(positionals) or str(flags.get("range") or "")
     if not raw:
         return fail("xl fmt: missing <range>", 2)
     sheet_name, address = parse_ref(raw)
@@ -552,7 +573,7 @@ def xl_col_delete(wb: Any, path: str, positionals: list[str], flags: dict[str, A
 
 
 def xl_merge(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
-    raw = first(positionals)
+    raw = first(positionals) or str(flags.get("range") or "")
     if not raw:
         return fail("xl merge: missing <range>", 2)
     sheet_name, address = parse_ref(raw)
@@ -563,7 +584,7 @@ def xl_merge(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], 
 
 
 def xl_unmerge(wb: Any, path: str, positionals: list[str], flags: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
-    raw = first(positionals)
+    raw = first(positionals) or str(flags.get("range") or "")
     if not raw:
         return fail("xl unmerge: missing <range>", 2)
     sheet_name, address = parse_ref(raw)
@@ -595,12 +616,38 @@ def xl_export(wb: Any, path: str, flags: dict[str, Any], state: dict[str, Any], 
     return ok_json({"ok": True, "exported": out_path, "format": "csv", "sheet": ws.title})
 
 
-def with_workbook(state: dict[str, Any], flags: dict[str, Any], cwd: str, fn: Any) -> dict[str, Any]:
-    path = active_path(state, flags, cwd)
+def with_workbook(
+    state: dict[str, Any],
+    flags: dict[str, Any],
+    cwd: str,
+    positionals: list[str],
+    fn: Any,
+) -> dict[str, Any]:
+    effective_positionals, effective_flags = split_workbook_positionals(positionals, flags)
+    path = active_path(state, effective_flags, cwd)
     if not path:
         return fail("xl: no active workbook; run `xl open <file.xlsx>` first", 1)
     wb = load_book(path)
-    return fn(wb, path)
+    return fn(wb, path, effective_positionals, effective_flags)
+
+
+def split_workbook_positionals(
+    positionals: list[str],
+    flags: dict[str, Any],
+) -> tuple[list[str], dict[str, Any]]:
+    effective_flags = dict(flags)
+    effective_positionals = list(positionals)
+    if not (effective_flags.get("book") or effective_flags.get("workbook")) and effective_positionals:
+        first_arg = effective_positionals[0]
+        if looks_like_workbook_path(first_arg):
+            effective_flags["book"] = first_arg
+            effective_positionals = effective_positionals[1:]
+    return effective_positionals, effective_flags
+
+
+def looks_like_workbook_path(raw: str) -> bool:
+    suffix = Path(os.path.expanduser(raw)).suffix.lower()
+    return suffix in (".xlsx", ".xlsm", ".xltx", ".xltm", ".xls")
 
 
 def load_book(path: str) -> Any:

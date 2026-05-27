@@ -54,7 +54,7 @@
       "engine": "openpyxl",
       "platforms": ["linux", "macos", "windows"],
       "supports": [
-        "open", "new", "save", "close", "books",
+        "info", "open", "new", "save", "close", "books",
         "sheets", "sheet", "sheet.add", "sheet.rename", "sheet.delete",
         "used", "get", "range", "find",
         "set", "fill", "clear", "fmt", "width",
@@ -111,6 +111,7 @@
     "github": "Whopus"
   },
   "commands": [
+    { "action": "info",         "desc": "返回工作簿概览（sheet、行列、已用范围）" },
     { "action": "open",         "desc": "打开已有 .xlsx/.xls 文件" },
     { "action": "new",          "desc": "新建空白工作簿" },
     { "action": "save",         "desc": "保存当前工作簿（可另存为）" },

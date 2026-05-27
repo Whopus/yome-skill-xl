@@ -1,6 +1,6 @@
 # @yome/xl
 
-Excel workbook editing commands for Yome agents (open / new / save / close /
+Excel workbook editing commands for Yome agents (info / open / new / save / close /
 books / sheets / sheet / sheet.add / sheet.rename / sheet.delete / get / range
 / used / find / set / fill / clear / fmt / width / row.* / col.* / merge /
 unmerge / export). One of the official skills.

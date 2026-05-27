@@ -3,12 +3,22 @@
   "domain": "xl",
   "signature_version": "1.1.0",
   "label": { "zh": "Excel 表格", "en": "Excel Spreadsheet" },
-  "helpSummary": "open, new, save, close, books, sheets, sheet, sheet.add, sheet.rename, sheet.delete, sheet.copy, sheet.move, sheet.hide, sheet.protect, sheet.unprotect, sheet.color, get, range, used, find, set, fill, clear, fmt, width, height, row.add, row.delete, row.hide, col.add, col.delete, col.hide, insert, delete, autofill, autofit, sort, filter, filter.clear, freeze, freeze.clear, copy, cut, paste, merge, unmerge, wrap, rotate, indent, group, ungroup, comment, comment.delete, link, name, cf, validation, chart.add, chart.delete, chart.export, image.add, shape.add, pivot.add, pivot.refresh, pivot.field, page, printarea, print, view, zoom, gridlines, headings, recalc, protect.book, props, screen, alerts, undo, export, batch",
+  "helpSummary": "info, open, new, save, close, books, sheets, sheet, sheet.add, sheet.rename, sheet.delete, sheet.copy, sheet.move, sheet.hide, sheet.protect, sheet.unprotect, sheet.color, get, range, used, find, set, fill, clear, fmt, width, height, row.add, row.delete, row.hide, col.add, col.delete, col.hide, insert, delete, autofill, autofit, sort, filter, filter.clear, freeze, freeze.clear, copy, cut, paste, merge, unmerge, wrap, rotate, indent, group, ungroup, comment, comment.delete, link, name, cf, validation, chart.add, chart.delete, chart.export, image.add, shape.add, pivot.add, pivot.refresh, pivot.field, page, printarea, print, view, zoom, gridlines, headings, recalc, protect.book, props, screen, alerts, undo, export, batch",
   "docs": {
-    "zh": "\n## xl 命令 — Excel 表格\n\n### 工作簿\nxl open <文件路径>                    打开 .xlsx/.xls 文件\nxl new [<路径>] [--force]              新建工作簿（给路径则直接落盘）\nxl save [--path=<另存路径>] [--force]  保存（可另存为）\nxl close [--save=true|false]           关闭\nxl books                               列出所有打开的工作簿\n\n### 工作表\nxl sheets                              列出工作表（名称、行、列、是否活动）\nxl sheet <名称>                        切换活动工作表\nxl sheet.add --name=<名称>             新建工作表\nxl sheet.rename <旧名> --name=<新名>   重命名\nxl sheet.delete <名称>                 删除\n\n### 读取\nxl get <单元格> [--format=json|tsv|raw]  读取单元格 (A1, Sheet2@B3)\nxl range <范围>                        读取范围返回 TSV (A1:C10, Sheet2@A1:D100)\nxl used                                返回已用范围 + 行列数\nxl find <关键词> [--in=<范围>]         搜索内容\n\n### 写入\nxl set <单元格> --value=<值> [--type=text|number|auto]  写入值（auto: 数字串按数字写）\nxl set <单元格> --formula=<公式>       写入公式 (如 =SUM(A1:A10))\nxl fill <范围> --values=<TSV>          批量填充（TAB 分列、\\n 分行）\nxl clear <范围>                        清除内容\n\n### 行列\nxl row.add <行号> [--count=1]          在指定行号前插入行\nxl row.delete <行号> [--count=1]       删除指定行\nxl col.add <列号> [--count=1]          在指定列前插入列 (列号: A/B/C...)\nxl col.delete <列号> [--count=1]       删除指定列\nxl width <列号> --size=<宽度>          设置列宽\n\n### 格式\nxl fmt <范围> [--bold] [--italic] [--size=<字号>] [--color=<颜色>] [--bg=<背景色>] [--align=left|center|right] [--numfmt=<格式串>] [--border=<样式>]\n  颜色/背景: 名称(black/red/blue/...) | #RRGGBB | R,G,B\n  numfmt 示例: '0.00' / '0%' / 'yyyy-mm-dd' / '#,##0.00'\n  border: all|top|bottom|left|right|outline （默认 thin 黑色实线）\n  所有参数可任意组合，单个属性失败不影响其他属性\nxl merge <范围>                        合并单元格\nxl unmerge <范围>                      取消合并\n\n### 导出\nxl export --format=pdf|csv --path=<输出路径> [--force]\n\n范围语法: A1 | A1:C10 | Sheet@A1 | Sheet@A1:C10\n路径: ~ 为主目录，相对路径基于 ~/Desktop\n除 open/new/books 外，所有命令作用于当前活动工作簿（需先 open 或 new）\n",
-    "en": "\n## xl command — Excel Spreadsheet\n\n### Workbooks\nxl open <file_path>                    Open .xlsx/.xls file\nxl new [<path>] [--force]              Create new workbook (with path: create and save)\nxl save [--path=<save_as_path>] [--force]  Save (or save as)\nxl close [--save=true|false]           Close\nxl books                               List all open workbooks\n\n### Sheets\nxl sheets                              List sheets (name, rows, cols, active)\nxl sheet <name>                        Switch active sheet\nxl sheet.add --name=<name>             Create new sheet\nxl sheet.rename <old_name> --name=<new_name>  Rename\nxl sheet.delete <name>                 Delete\n\n### Read\nxl get <cell> [--format=json|tsv|raw]  Read cell (A1, Sheet2@B3)\nxl range <range>                       Read range as TSV (A1:C10, Sheet2@A1:D100)\nxl used                                Return used range + row/col count\nxl find <keyword> [--in=<range>]       Search content\n\n### Write\nxl set <cell> --value=<value> [--type=text|number|auto]  Write value (auto: numeric string written as number)\nxl set <cell> --formula=<formula>      Write formula (e.g. =SUM(A1:A10))\nxl fill <range> --values=<TSV>         Batch fill (TAB cols, \\n rows)\nxl clear <range>                       Clear contents\n\n### Rows / Columns\nxl row.add <row_index> [--count=1]     Insert rows above row_index\nxl row.delete <row_index> [--count=1]  Delete rows starting at row_index\nxl col.add <column> [--count=1]        Insert columns before column (A/B/C...)\nxl col.delete <column> [--count=1]     Delete columns starting at column\nxl width <column> --size=<width>       Set column width\n\n### Format\nxl fmt <range> [--bold] [--italic] [--size=<font_size>] [--color=<color>] [--bg=<bg_color>] [--align=left|center|right] [--numfmt=<format_string>] [--border=<style>]\n  Colors/bg: name (black/red/blue/...) | #RRGGBB | R,G,B\n  numfmt examples: '0.00' / '0%' / 'yyyy-mm-dd' / '#,##0.00'\n  border: all|top|bottom|left|right|outline (default: thin black solid)\n  All params combine freely; a single attribute failing does not abort others\nxl merge <range>                       Merge cells\nxl unmerge <range>                     Unmerge cells\n\n### Export\nxl export --format=pdf|csv --path=<output_path> [--force]\n\nRange syntax: A1 | A1:C10 | Sheet@A1 | Sheet@A1:C10\nPath: ~ is home directory, relative paths are based on ~/Desktop\nExcept open/new/books, all commands operate on the currently active workbook (open or new first)\n"
+    "zh": "\n## xl 命令 — Excel 表格\n\n### 工作簿\nxl info [<文件路径>|--book=<路径>]      工作簿概览（sheet、行列、已用范围）\nxl open <文件路径>                    打开 .xlsx/.xls 文件\nxl new [<路径>] [--force]              新建工作簿（给路径则直接落盘）\nxl save [--path=<另存路径>] [--force]  保存（可另存为）\nxl close [--save=true|false]           关闭\nxl books                               列出所有打开的工作簿\n\n### 工作表\nxl sheets [<文件路径>|--book=<路径>]    列出工作表（名称、行、列、是否活动）\nxl sheet <名称>                        切换活动工作表\nxl sheet.add --name=<名称>             新建工作表\nxl sheet.rename <旧名> --name=<新名>   重命名\nxl sheet.delete <名称>                 删除\n\n### 读取\nxl get <单元格> [--sheet=<表名>] [--book=<路径>] [--format=json|tsv|raw]  读取单元格 (A1, Sheet2@B3)\nxl range <范围> | xl range <文件路径> --range=<范围> [--sheet=<表名>]  读取范围返回 TSV\nxl used [<文件路径>|--book=<路径>] [--sheet=<表名>]  返回已用范围 + 行列数\nxl find <关键词> [--in=<范围>] [--sheet=<表名>] [--book=<路径>]  搜索内容\n\n### 写入\nxl set <单元格> --value=<值> [--type=text|number|auto]  写入值（auto: 数字串按数字写）\nxl set <单元格> --formula=<公式>       写入公式 (如 =SUM(A1:A10))\nxl fill <范围> --values=<TSV>          批量填充（TAB 分列、\\n 分行）\nxl clear <范围>                        清除内容\n\n### 行列\nxl row.add <行号> [--count=1]          在指定行号前插入行\nxl row.delete <行号> [--count=1]       删除指定行\nxl col.add <列号> [--count=1]          在指定列前插入列 (列号: A/B/C...)\nxl col.delete <列号> [--count=1]       删除指定列\nxl width <列号> --size=<宽度>          设置列宽\n\n### 格式\nxl fmt <范围> [--bold] [--italic] [--size=<字号>] [--color=<颜色>] [--bg=<背景色>] [--align=left|center|right] [--numfmt=<格式串>] [--border=<样式>]\n  颜色/背景: 名称(black/red/blue/...) | #RRGGBB | R,G,B\n  numfmt 示例: '0.00' / '0%' / 'yyyy-mm-dd' / '#,##0.00'\n  border: all|top|bottom|left|right|outline （默认 thin 黑色实线）\n  所有参数可任意组合，单个属性失败不影响其他属性\nxl merge <范围>                        合并单元格\nxl unmerge <范围>                      取消合并\n\n### 导出\nxl export --format=pdf|csv --path=<输出路径> [--force]\n\n范围语法: A1 | A1:C10 | Sheet@A1 | Sheet@A1:C10\n路径: ~ 为主目录，相对路径基于 ~/Desktop；Linux mesh 相对路径基于设备工作目录\n除 open/new/books/info 外，命令默认作用于当前活动工作簿；也可传 <文件路径> 或 --book=<路径>\n",
+    "en": "\n## xl command — Excel Spreadsheet\n\n### Workbooks\nxl info [<file_path>|--book=<path>]    Workbook overview (sheets, rows/cols, used ranges)\nxl open <file_path>                    Open .xlsx/.xls file\nxl new [<path>] [--force]              Create new workbook (with path: create and save)\nxl save [--path=<save_as_path>] [--force]  Save (or save as)\nxl close [--save=true|false]           Close\nxl books                               List all open workbooks\n\n### Sheets\nxl sheets [<file_path>|--book=<path>]  List sheets (name, rows, cols, active)\nxl sheet <name>                        Switch active sheet\nxl sheet.add --name=<name>             Create new sheet\nxl sheet.rename <old_name> --name=<new_name>  Rename\nxl sheet.delete <name>                 Delete\n\n### Read\nxl get <cell> [--sheet=<name>] [--book=<path>] [--format=json|tsv|raw]  Read cell (A1, Sheet2@B3)\nxl range <range> | xl range <file_path> --range=<range> [--sheet=<name>]  Read range as TSV\nxl used [<file_path>|--book=<path>] [--sheet=<name>]  Return used range + row/col count\nxl find <keyword> [--in=<range>] [--sheet=<name>] [--book=<path>]  Search content\n\n### Write\nxl set <cell> --value=<value> [--type=text|number|auto]  Write value (auto: numeric string written as number)\nxl set <cell> --formula=<formula>      Write formula (e.g. =SUM(A1:A10))\nxl fill <range> --values=<TSV>         Batch fill (TAB cols, \\n rows)\nxl clear <range>                       Clear contents\n\n### Rows / Columns\nxl row.add <row_index> [--count=1]     Insert rows above row_index\nxl row.delete <row_index> [--count=1]  Delete rows starting at row_index\nxl col.add <column> [--count=1]        Insert columns before column (A/B/C...)\nxl col.delete <column> [--count=1]     Delete columns starting at column\nxl width <column> --size=<width>       Set column width\n\n### Format\nxl fmt <range> [--bold] [--italic] [--size=<font_size>] [--color=<color>] [--bg=<bg_color>] [--align=left|center|right] [--numfmt=<format_string>] [--border=<style>]\n  Colors/bg: name (black/red/blue/...) | #RRGGBB | R,G,B\n  numfmt examples: '0.00' / '0%' / 'yyyy-mm-dd' / '#,##0.00'\n  border: all|top|bottom|left|right|outline (default: thin black solid)\n  All params combine freely; a single attribute failing does not abort others\nxl merge <range>                       Merge cells\nxl unmerge <range>                     Unmerge cells\n\n### Export\nxl export --format=pdf|csv --path=<output_path> [--force]\n\nRange syntax: A1 | A1:C10 | Sheet@A1 | Sheet@A1:C10\nPath: ~ is home directory, relative paths are based on ~/Desktop; on Linux mesh relative paths use the device working directory\nExcept open/new/books/info, commands default to the active workbook; you may pass <file_path> or --book=<path>\n"
   },
   "commands": {
+    "info": {
+      "usage": { "zh": "xl info [<文件路径>|--book=<路径>]", "en": "xl info [<file_path>|--book=<path>]" },
+      "description": { "zh": "返回工作簿概览（所有 sheet 的行列数、已用范围、当前活动表）", "en": "Return workbook overview (sheet row/column counts, used ranges, active sheet)" },
+      "positional": "book",
+      "params": {
+        "book": { "description": { "zh": "工作簿路径；与 positional 等价", "en": "Workbook path; equivalent to positional" } },
+        "workbook": { "description": { "zh": "--book 的别名", "en": "Alias of --book" } }
+      },
+      "since": "1.1.1"
+    },
     "open": {
       "usage": { "zh": "xl open <文件路径>", "en": "xl open <file_path>" },
       "description": { "zh": "打开 .xlsx/.xls 文件", "en": "Open .xlsx/.xls file" },
@@ -47,8 +57,13 @@
       "since": "1.0.0"
     },
     "sheets": {
-      "usage": "xl sheets",
-      "description": { "zh": "列出当前工作簿的所有工作表", "en": "List all sheets in current workbook" },
+      "usage": { "zh": "xl sheets [<文件路径>|--book=<路径>]", "en": "xl sheets [<file_path>|--book=<path>]" },
+      "description": { "zh": "列出当前工作簿或指定工作簿的所有工作表", "en": "List all sheets in the active or specified workbook" },
+      "positional": "book",
+      "params": {
+        "book": { "description": { "zh": "工作簿路径；与 positional 等价", "en": "Workbook path; equivalent to positional" } },
+        "workbook": { "description": { "zh": "--book 的别名", "en": "Alias of --book" } }
+      },
       "compress": { "kind": "custom", "module": "backends/sandbox/src/compress.ts", "export": "compressSheets" },
       "since": "1.0.0"
     },
@@ -78,22 +93,39 @@
       "since": "1.0.0"
     },
     "get": {
-      "usage": { "zh": "xl get <单元格> [--format=json|tsv|raw]", "en": "xl get <cell> [--format=json|tsv|raw]" },
+      "usage": { "zh": "xl get <单元格> [--sheet=<表名>] [--book=<路径>] [--format=json|tsv|raw]", "en": "xl get <cell> [--sheet=<name>] [--book=<path>] [--format=json|tsv|raw]" },
       "description": { "zh": "读取单元格 (A1, Sheet2@B3)。format: json(默认含值+公式) | tsv(value\\tformula) | raw(仅值)", "en": "Read cell (A1, Sheet2@B3). format: json (default, value+formula) | tsv (value\\tformula) | raw (value only)" },
       "positional": "cell",
-      "params": { "format": { "description": { "zh": "输出格式", "en": "Output format" }, "values": ["json", "tsv", "raw"] } },
+      "params": {
+        "format": { "description": { "zh": "输出格式", "en": "Output format" }, "values": ["json", "tsv", "raw"] },
+        "sheet": { "description": { "zh": "工作表名称；也可用 Sheet@A1", "en": "Sheet name; Sheet@A1 syntax also works" } },
+        "book": { "description": { "zh": "工作簿路径；也可作为第一个 positional 传入", "en": "Workbook path; may also be passed as the first positional" } },
+        "workbook": { "description": { "zh": "--book 的别名", "en": "Alias of --book" } }
+      },
       "since": "1.0.0"
     },
     "range": {
-      "usage": { "zh": "xl range <范围>", "en": "xl range <range>" },
+      "usage": { "zh": "xl range <范围> | xl range <文件路径> --range=<范围> [--sheet=<表名>]", "en": "xl range <range> | xl range <file_path> --range=<range> [--sheet=<name>]" },
       "description": { "zh": "读取范围，返回 TSV (如 A1:C10, Sheet2@A1:D100)", "en": "Read range, returns TSV (e.g. A1:C10, Sheet2@A1:D100)" },
       "positional": "range",
+      "params": {
+        "range": { "description": { "zh": "范围；当第一个 positional 是文件路径时必填", "en": "Cell range; required when the first positional is a file path" } },
+        "sheet": { "description": { "zh": "工作表名称；也可用 Sheet@A1:C10", "en": "Sheet name; Sheet@A1:C10 syntax also works" } },
+        "book": { "description": { "zh": "工作簿路径；也可作为第一个 positional 传入", "en": "Workbook path; may also be passed as the first positional" } },
+        "workbook": { "description": { "zh": "--book 的别名", "en": "Alias of --book" } }
+      },
       "compress": { "kind": "custom", "module": "backends/sandbox/src/compress.ts", "export": "compressRange" },
       "since": "1.0.0"
     },
     "used": {
-      "usage": "xl used",
-      "description": { "zh": "返回活动工作表的已用范围和行列数", "en": "Return used range and row/column count of active sheet" },
+      "usage": { "zh": "xl used [<文件路径>|--book=<路径>] [--sheet=<表名>]", "en": "xl used [<file_path>|--book=<path>] [--sheet=<name>]" },
+      "description": { "zh": "返回活动工作表或指定工作表的已用范围和行列数", "en": "Return used range and row/column count of the active or specified sheet" },
+      "positional": "book",
+      "params": {
+        "sheet": { "description": { "zh": "工作表名称", "en": "Sheet name" } },
+        "book": { "description": { "zh": "工作簿路径；与 positional 等价", "en": "Workbook path; equivalent to positional" } },
+        "workbook": { "description": { "zh": "--book 的别名", "en": "Alias of --book" } }
+      },
       "compress": { "kind": "custom", "module": "backends/sandbox/src/compress.ts", "export": "compressUsed" },
       "since": "1.0.0"
     },
@@ -103,7 +135,10 @@
       "positional": "what",
       "params": {
         "what": { "description": { "zh": "搜索关键词（也可作为 positional）", "en": "Search keyword (also accepts positional)" } },
-        "in": { "description": { "zh": "搜索范围，默认 used range", "en": "Search range, defaults to used range" } }
+        "in": { "description": { "zh": "搜索范围，默认 used range", "en": "Search range, defaults to used range" } },
+        "sheet": { "description": { "zh": "工作表名称", "en": "Sheet name" } },
+        "book": { "description": { "zh": "工作簿路径；也可作为第一个 positional 传入", "en": "Workbook path; may also be passed as the first positional" } },
+        "workbook": { "description": { "zh": "--book 的别名", "en": "Alias of --book" } }
       },
       "compress": { "kind": "custom", "module": "backends/sandbox/src/compress.ts", "export": "compressFind" },
       "since": "1.0.0"
