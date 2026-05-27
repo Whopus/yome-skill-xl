@@ -9,7 +9,7 @@
   "homepage": "https://yome.work/skills/@yome/xl",
   "repo": "https://github.com/Whopus/yome-skill-xl",
   "yome_min_version": "1.0.0",
-  "platforms": ["macos", "ios", "node", "sandbox"],
+  "platforms": ["macos", "ios", "linux", "node", "sandbox"],
   "delivery": {
     "macos": {
       "backend": "bundled",
@@ -27,11 +27,65 @@
       "entry": "src/index.ts",
       "implements_signature": ">=1.0.0 <2.0.0"
     },
+    "python": {
+      "backend": "ota",
+      "package": "backends/python",
+      "entry": "xl_backend.py",
+      "runtime": "python>=3.10",
+      "engine": "openpyxl",
+      "implements_signature": ">=1.0.0 <2.0.0"
+    },
     "sandbox": {
       "backend": "ota",
       "package": "backends/sandbox",
       "entry": "src/index.ts",
       "implements_signature": ">=1.0.0 <2.0.0"
+    }
+  },
+  "backends": {
+    "applescript-excel": {
+      "runtime": "applescript",
+      "engine": "Microsoft Excel",
+      "platforms": ["macos"],
+      "supports": ["*"]
+    },
+    "python-openpyxl": {
+      "runtime": "python",
+      "engine": "openpyxl",
+      "platforms": ["linux", "macos", "windows"],
+      "supports": [
+        "open", "new", "save", "close", "books",
+        "sheets", "sheet", "sheet.add", "sheet.rename", "sheet.delete",
+        "used", "get", "range", "find",
+        "set", "fill", "clear", "fmt", "width",
+        "row.add", "row.delete", "col.add", "col.delete",
+        "merge", "unmerge", "export"
+      ]
+    },
+    "node-ota": {
+      "runtime": "node",
+      "platforms": ["linux", "macos", "windows"],
+      "status": "stub",
+      "supports": []
+    },
+    "sandbox-memory": {
+      "runtime": "node",
+      "platforms": ["sandbox"],
+      "supports": ["*"]
+    }
+  },
+  "adapters": {
+    "linux": {
+      "prefer": ["python-openpyxl"]
+    },
+    "macos": {
+      "prefer": ["applescript-excel", "python-openpyxl"]
+    },
+    "windows": {
+      "prefer": ["python-openpyxl"]
+    },
+    "sandbox": {
+      "prefer": ["sandbox-memory"]
     }
   },
   "ota_overlay": {
@@ -42,13 +96,13 @@
   "capabilities": ["fs:read", "fs:write", "applescript"],
   "system_capabilities": ["fs:read", "fs:write", "applescript"],
   "permissions_summary": {
-    "zh": "读写 .xlsx/.xls 文件，调用 macOS Microsoft Excel",
-    "en": "Read/write .xlsx/.xls files, control macOS Microsoft Excel"
+    "zh": "读写 .xlsx/.xls 文件；macOS 可调用 Microsoft Excel，Linux/Windows 可用 python-openpyxl 后端读写 .xlsx/.xlsm",
+    "en": "Read/write .xlsx/.xls files; macOS can control Microsoft Excel, Linux/Windows can use the python-openpyxl backend for .xlsx/.xlsm"
   },
   "l1": {
     "when": "user wants to read / edit / format / export an Excel workbook (.xlsx, .xls)",
     "entry": "xl --help",
-    "effects": "opens or modifies a workbook in Microsoft Excel; writes .xlsx / .pdf / .csv to disk"
+    "effects": "opens or modifies a workbook; writes .xlsx / .csv to disk on headless Python hosts, and .xlsx / .pdf / .csv through Microsoft Excel on macOS"
   },
   "tags": ["productivity", "office", "spreadsheet"],
   "license": "Apache-2.0",

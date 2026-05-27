@@ -678,6 +678,12 @@
         "text":   { "description": { "zh": "形状内文本", "en": "Shape text" } }
       },
       "since": "1.1.0"
+    },
+    "batch": {
+      "usage": "xl batch <<EOF\n<command1>\n<command2>\nEOF",
+      "description": { "zh": "批量执行多条 xl 子命令。子命令不带 xl 前缀。", "en": "Run multiple xl subcommands. Subcommands omit the xl prefix." },
+      "params": {},
+      "since": "1.0.0"
     }
   },
   "compactDocs": {

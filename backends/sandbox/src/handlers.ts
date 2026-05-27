@@ -43,6 +43,8 @@ export interface HandlerResult {
 
 const ok  = (stdout: string): HandlerResult => ({ stdout, stderr: '', exitCode: 0 });
 const err = (stderr: string, code = 1): HandlerResult => ({ stdout: '', stderr, exitCode: code });
+const isErr = <T>(v: T | HandlerResult): v is HandlerResult => (v as HandlerResult).exitCode !== undefined;
+type RangeBox = NonNullable<ReturnType<typeof parseRange>>;
 
 interface XlCarrier {
   scratch: { skillStates?: { xl?: XlWorldState } & Record<string, unknown> } & Record<string, unknown>;
@@ -78,6 +80,23 @@ function ensureCell(sheet: XlSheet, addr: string): XlCell {
 function resolveSheet(file: XlFile, refSheet: string | undefined): XlSheet | undefined {
   if (!refSheet) return getActiveSheet(file);
   return findSheet(file, refSheet);
+}
+
+function requireActiveFile(state: XlWorldState, action: string): XlFile | HandlerResult {
+  const file = getActiveFile(state);
+  return file ?? err(`xl ${action}: no active workbook`);
+}
+
+function requireSheetFromRef(file: XlFile, action: string, rawRef: string): XlSheet | HandlerResult {
+  const ref = parseRef(rawRef);
+  const sheet = resolveSheet(file, ref.sheet);
+  return sheet ?? err(`xl ${action}: sheet "${ref.sheet}" not found`);
+}
+
+function requireRangeRef(action: string, rawRef: string): RangeBox | HandlerResult {
+  const ref = parseRef(rawRef);
+  const box = parseRange(ref.address);
+  return box ?? err(`xl ${action}: invalid range "${ref.address}"`);
 }
 
 export function handleXl(world: XlCarrier, cmd: ParsedCommand): HandlerResult {
@@ -355,15 +374,15 @@ export function handleXl(world: XlCarrier, cmd: ParsedCommand): HandlerResult {
     }
 
     case 'clear': {
-      const file = getActiveFile(state);
-      if (!file) return err('xl clear: no active workbook');
+      const file = requireActiveFile(state, 'clear');
+      if (isErr(file)) return file;
       const raw = cmd.positionals[0];
       if (!raw) return err('xl clear: missing <range>');
       const ref = parseRef(raw);
-      const sheet = resolveSheet(file, ref.sheet);
-      if (!sheet) return err(`xl clear: sheet "${ref.sheet}" not found`);
-      const box = parseRange(ref.address);
-      if (!box) return err(`xl clear: invalid range "${ref.address}"`);
+      const sheet = requireSheetFromRef(file, 'clear', raw);
+      if (isErr(sheet)) return sheet;
+      const box = requireRangeRef('clear', raw);
+      if (isErr(box)) return box;
       let cleared = 0;
       for (let r = box.start.row; r <= box.end.row; r++) {
         for (let c = box.start.col; c <= box.end.col; c++) {
@@ -382,15 +401,15 @@ export function handleXl(world: XlCarrier, cmd: ParsedCommand): HandlerResult {
 
     // ─── Format ────────────────────────────────────────────────────
     case 'fmt': {
-      const file = getActiveFile(state);
-      if (!file) return err('xl fmt: no active workbook');
+      const file = requireActiveFile(state, 'fmt');
+      if (isErr(file)) return file;
       const raw = cmd.positionals[0];
       if (!raw) return err('xl fmt: missing <range>');
       const ref = parseRef(raw);
-      const sheet = resolveSheet(file, ref.sheet);
-      if (!sheet) return err(`xl fmt: sheet "${ref.sheet}" not found`);
-      const box = parseRange(ref.address);
-      if (!box) return err(`xl fmt: invalid range "${ref.address}"`);
+      const sheet = requireSheetFromRef(file, 'fmt', raw);
+      if (isErr(sheet)) return sheet;
+      const box = requireRangeRef('fmt', raw);
+      if (isErr(box)) return box;
       const applied: Record<string, unknown> = {};
       const apply = (cell: XlCell) => {
         if (cmd.flags.bold   !== undefined) { cell.bold   = cmd.flags.bold   !== 'false'; applied.bold   = cell.bold; }
@@ -510,15 +529,15 @@ export function handleXl(world: XlCarrier, cmd: ParsedCommand): HandlerResult {
 
     // ─── Merge ─────────────────────────────────────────────────────
     case 'merge': {
-      const file = getActiveFile(state);
-      if (!file) return err('xl merge: no active workbook');
+      const file = requireActiveFile(state, 'merge');
+      if (isErr(file)) return file;
       const raw = cmd.positionals[0];
       if (!raw) return err('xl merge: missing <range>');
+      const sheet = requireSheetFromRef(file, 'merge', raw);
+      if (isErr(sheet)) return sheet;
       const ref = parseRef(raw);
-      const sheet = resolveSheet(file, ref.sheet);
-      if (!sheet) return err(`xl merge: sheet "${ref.sheet}" not found`);
-      const box = parseRange(ref.address);
-      if (!box) return err(`xl merge: invalid range "${ref.address}"`);
+      const box = requireRangeRef('merge', raw);
+      if (isErr(box)) return box;
       const anchor = formatAddr(box.start);
       const anchorRange = `${anchor}:${formatAddr(box.end)}`;
       ensureCell(sheet, anchor).mergeAnchor = anchorRange;
@@ -533,15 +552,15 @@ export function handleXl(world: XlCarrier, cmd: ParsedCommand): HandlerResult {
     }
 
     case 'unmerge': {
-      const file = getActiveFile(state);
-      if (!file) return err('xl unmerge: no active workbook');
+      const file = requireActiveFile(state, 'unmerge');
+      if (isErr(file)) return file;
       const raw = cmd.positionals[0];
       if (!raw) return err('xl unmerge: missing <range>');
+      const sheet = requireSheetFromRef(file, 'unmerge', raw);
+      if (isErr(sheet)) return sheet;
       const ref = parseRef(raw);
-      const sheet = resolveSheet(file, ref.sheet);
-      if (!sheet) return err(`xl unmerge: sheet "${ref.sheet}" not found`);
-      const box = parseRange(ref.address);
-      if (!box) return err(`xl unmerge: invalid range "${ref.address}"`);
+      const box = requireRangeRef('unmerge', raw);
+      if (isErr(box)) return box;
       for (let r = box.start.row; r <= box.end.row; r++) {
         for (let c = box.start.col; c <= box.end.col; c++) {
           const addr = formatAddr({ col: c, row: r });
